@@ -1,0 +1,25 @@
+name: "[PR] Verification pipeline"
+
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  pytest:
+    name: Running pytests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: instal libraries
+        run: |
+          pip install fastapi uvicorn
+          pip install sqlalchemy
+          pip install pytest
+          pip install httpx
+      - name: Running app
+        run: |
+          uvicorn app.main:app &
+      - name: Running test
+        run: |
+          pytest -v
