@@ -16,6 +16,7 @@ jobs:
           pip install fastapi uvicorn
           pip install sqlalchemy
           pip install pytest
+          pip install httpx
       - name: Running app
         run: |
           uvicorn app.main:app &
