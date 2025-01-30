@@ -11,7 +11,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: instal libraries
+        run: |
+          pip install fastapi uvicorn
+          pip install sqlalchemy
+          pip install pytest
+      - name: Running app
+        run: |
+          uvicorn app.main:app
       - name: Running test
         run: |
-          pip install pytest
           pytest -v
