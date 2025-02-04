@@ -12,5 +12,9 @@ def get_tasks():
 
 @router.post("/tasks")
 def create_task(task: Task):
+    for i, existing_task in enumerate(tasks_db):
+        if existing_task.id == task.id:
+            tasks_db[i] = task
+            return task
     tasks_db.append(task)
     return task
