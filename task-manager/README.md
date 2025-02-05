@@ -6,5 +6,6 @@ For running this frontend application you need to have installed Node.js (v.22+)
 Run backend application. Then run the following commands:
 
 ```bash
-npm run dev
+npm install  # << Install dependencies
+npm run dev  # << Run the application
 ```
