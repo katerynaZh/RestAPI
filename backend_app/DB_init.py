@@ -1,4 +1,4 @@
-from app.database import Base, engine
-from app.models import TaskDB
+from backend_app.database import Base, engine
+from backend_app.models import TaskDB
 
 Base.metadata.create_all(bind=engine)

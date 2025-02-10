@@ -13,5 +13,8 @@ RUN pip install -r requirements.txt
 # Copy the rest of the application code from the host to the container
 COPY . .
 
+# Expose default port (8000)
+EXPOSE 8000
+
 # Specify the command to run the application using uvicorn
 CMD ["uvicorn", "backend_app.main:app", "--host", "0.0.0.0", "--port", "80"]

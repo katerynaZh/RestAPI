@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend_app
+      dockerfile: Dockerfile
+    ports:
+      - "80:8000"
+    volumes:
+      - ./backend_app:/app
+    # environment:
+    #   - DATABASE_URL=sqlite:///./tasks.db
+
+  frontend:
+    build:
+      context: ./frontend_app
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend_app:/app
+      - /app/node_modules
+    # environment:
+    #   - VITE_BACKEND_URL=http://localhost:8000
+    depends_on:
+      - backend
