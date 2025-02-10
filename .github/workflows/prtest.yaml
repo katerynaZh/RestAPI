@@ -13,10 +13,7 @@ jobs:
         uses: actions/checkout@v4
       - name: instal libraries
         run: |
-          pip install fastapi uvicorn
-          pip install sqlalchemy
-          pip install pytest
-          pip install httpx
+          pip install -r backend_app/requirements.txt
       - name: Running app
         run: |
           uvicorn backend_app.main:app &

@@ -1,9 +1,9 @@
 # RestAPI
-Service for experiments with REST API written in Python
+Service for experiments with REST API written in Python (backend_app)
 
 ## Requirements installation
 ```bash
-pip install -r requirements.txt
+pip install -r backend_app/requirements.txt
 ```
 
 ## Running the application
