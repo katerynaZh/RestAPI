@@ -19,7 +19,7 @@ jobs:
           pip install httpx
       - name: Running app
         run: |
-          uvicorn app.main:app &
+          uvicorn backend_app.main:app &
       - name: Running test
         run: |
           pytest -v

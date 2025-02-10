@@ -1,10 +1,10 @@
 from fastapi import FastAPI
-from app.routers import tasks
+from backend_app.routers import tasks
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-app.add_middleware(
+backend_app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Change this to ["http://localhost:5173"] for better security
     allow_credentials=True,
@@ -13,8 +13,8 @@ app.add_middleware(
 )
 
 
-app.include_router(tasks.router)
+backend_app.include_router(tasks.router)
 
-@app.get("/")
+@backend_app.get("/")
 def read_root():
     return {"message": "Hello, FastAPI!"}

@@ -9,12 +9,12 @@ pip install -r requirements.txt
 ## Running the application
 Debug mode:
 ```bash
-uvicorn app.main:app --reload
+uvicorn backend_app.main:app --reload
 ```
 
 Runnning as a service (not waiting in the console):
 ```bash
-uvicorn app.main:app &
+uvicorn backend_app.main:app &
 ```
 
 ## Tests execution
