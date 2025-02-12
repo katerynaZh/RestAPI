@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.models import Task
+from src.models import Task
 
 router = APIRouter()
 

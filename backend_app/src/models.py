@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String
-from app.database import Base  # ✅ Import Base from database.py
+from src.database import Base  # ✅ Import Base from database.py
 
 # ✅ SQLAlchemy Database Model (Mapped class)
 class TaskDB(Base):
