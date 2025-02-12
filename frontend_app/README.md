@@ -13,6 +13,6 @@ npm run dev  # << Run the application
 To run from the Docker container you can use the following commands (from the task-manager directory):
 
 ```bash
-docker build -t my-react-app .
-docker run -p 5173:5173 --rm my-react-app
+docker build -t frontend-app .
+docker run -p 5173:5173 --rm frontend-app
 ```
