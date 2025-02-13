@@ -59,7 +59,7 @@ function App() {
         {tasks.map((task) => (
           <li key={task.id}>
             <strong>{task.title}</strong> - {task.description} ({task.status})
-            <button onClick={() => startEditing(task)}>Edit</button>
+            <button data-testid="editing-task-btn" onClick={() => startEditing(task)}>Edit</button>
           </li>
         ))}
       </ul>
@@ -79,7 +79,7 @@ function App() {
         placeholder="Task description..."
       />
       <br />
-      <button onClick={saveTask}>{editingTask ? "Update Task" : "Add Task"}</button>
+      <button data-testid="updating-task-btn" onClick={saveTask}>{editingTask ? "Update Task" : "Add Task"}</button>
       {editingTask && <button onClick={resetForm}>Cancel</button>}
     </div>
   );

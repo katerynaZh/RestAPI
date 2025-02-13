@@ -10,7 +10,7 @@ npm install  # << Install dependencies
 npm run dev  # << Run the application
 ```
 
-To run from the Docker container you can use the following commands (from the task-manager directory):
+To run from the Docker container you can use the following commands (from the frontend_app directory):
 
 ```bash
 docker build -t frontend-app .
