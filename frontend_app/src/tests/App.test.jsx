@@ -2,6 +2,7 @@ import { test, expect, vi } from "vitest"; // ✅ Import only what we need
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 // import "@testing-library/jest-dom"; // ✅ Ensures matchers are loaded
 import App from "../App";
+import TaskManager from "../taskManager";
 
 
 // ✅ Mock axios properly
@@ -21,8 +22,9 @@ test("renders task list", async () => {
   expect(screen.getByTestId("tasks-list")).toBeTruthy(); // ✅ Ensures the component renders
 });
 
-test.skip("can add a new task", async () => {
-  render(<App />); 
+test("can add a new task", async () => {
+  render(<TaskManager />);
+  // fireEvent.click(screen.getByTestId("editing-task-btn")[0]);
 
   expect(screen.getByTestId("input-title")).toBeTruthy();
   // fireEvent.change(screen.getByTestId("input-title"), {

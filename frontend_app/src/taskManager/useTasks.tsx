@@ -13,12 +13,10 @@ const useTasks = () => {
 
     // Fetch tasks from backend
   useEffect(() => {
-    if (tasks.length === 0) {
     axios.get("http://localhost:8000/tasks")
       .then(response => { setTasks(response.data); console.log("render");})
       .catch(error => console.error("Error fetching tasks:", error));
-    }
-  }, [tasks]);
+  }, []);
 
   // Handle adding or updating a task
   const addOrUpdateTask = (newTask: CustomTask) => {

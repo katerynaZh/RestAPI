@@ -17,7 +17,7 @@ const AddOrEditDialog = ({header, task, saveButtonText, onSave, onCancel}: Props
         if (task) 
         {setEditingTask(task)}
     }, [task])
-
+console.log("RENDER FORM", header);
 return <>
     <h3>{header}</h3>
     <input
