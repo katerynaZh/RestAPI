@@ -1,43 +1,55 @@
-import React, { MouseEventHandler, useEffect, useState } from "react";
-import { CustomTask } from "./useTasks"
+import React, { useEffect, useState } from "react";
+import { Modal, Input, Button, Form } from "antd";
+import { CustomTask } from "./useTasks";
 
 type Props = {
-    header: string,
-    saveButtonText: string,
-    task?: CustomTask,
-    onSave: (task: CustomTask)  => void,
-    onCancel:()=>void,
-}
-const INIT_TASK = {title: "", description: ""} as CustomTask;
+    visible: boolean;
+    task?: CustomTask;
+    onSave: (task: CustomTask) => void;
+    onCancel: () => void;
+};
 
-const AddOrEditDialog = ({header, task, saveButtonText, onSave, onCancel}: Props) => {
-    const [editingTask, setEditingTask] = useState<CustomTask>(INIT_TASK);
+const AddOrEditDialog = ({ visible, task, onSave, onCancel }: Props) => {
+    const [form] = Form.useForm();
 
     useEffect(() => {
-        if (task) 
-        {setEditingTask(task)}
-    }, [task])
-console.log("RENDER FORM", header);
-return <>
-    <h3>{header}</h3>
-    <input
-    type="text"
-    data-testid="input-title"
-    value={editingTask?.title}
-    onChange={(e) => setEditingTask((prev)=>{return {...prev, title: e.target.value};})}
-    placeholder="Task title..."
-    />
-    <br />
-    <input
-    type="text"
-    data-testid="input-description"
-    value={editingTask.description}
-    onChange={(e) => setEditingTask((prev)=>{return {...prev, description: e.target.value};})}
-    placeholder="Task description..."
-    />
-    <br />
-    <button data-testid="update-task-btn" onClick={()=>onSave(editingTask)}>{saveButtonText}</button>
-     {task && <button onClick={onCancel}>Cancel</button>}</>
-}
+        if (task) {
+            form.setFieldsValue(task);
+        } else {
+            form.resetFields();
+        }
+    }, [task, form]);
 
-export default AddOrEditDialog; 
+    const handleSave = () => {
+        form.validateFields().then((values) => {
+            onSave({ ...task, ...values });
+        });
+    };
+
+    return (
+        <Modal
+            title={task ? "Edit Task" : "Add Task"}
+            open={visible}
+            onCancel={onCancel}
+            footer={[
+                <Button key="cancel" onClick={onCancel}>
+                    Cancel
+                </Button>,
+                <Button key="save" type="primary" onClick={handleSave}>
+                    {task ? "Update Task" : "Add Task"}
+                </Button>,
+            ]}
+        >
+            <Form form={form} layout="vertical">
+                <Form.Item name="title" label="Title" rules={[{ required: true, message: "Title is required" }]}>
+                    <Input placeholder="Enter task title" />
+                </Form.Item>
+                <Form.Item name="description" label="Description">
+                    <Input.TextArea rows={3} placeholder="Enter task description" />
+                </Form.Item>
+            </Form>
+        </Modal>
+    );
+};
+
+export default AddOrEditDialog;

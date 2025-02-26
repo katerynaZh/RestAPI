@@ -1,50 +1,65 @@
 import React, { useEffect, useState } from "react";
+import { Button, Layout } from "antd";
 import useTasks, { CustomTask } from "./useTasks";
 import TasksList from "./TasksList";
 import AddOrEditDialog from "./AddOrEditDialog";
 
-const TaskManager = ()=>{
-    const { tasks, addOrUpdateTask } = useTasks();
+const { Content } = Layout;
 
-    const [editingTask, setEditingTask] = useState<CustomTask>();
+const TaskManager = () => {
+    const { tasks, addOrUpdateTask } = useTasks();
+    const [editingTask, setEditingTask] = useState<CustomTask | undefined>();
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         resetForm();
     }, [tasks]);
 
-    // Start editing a task
-    const startEditing = (task) => {
+    const startEditing = (task: CustomTask) => {
         setEditingTask(task);
+        setModalVisible(true);
     };
 
-    // Reset form fields
     const resetForm = () => {
         setEditingTask(undefined);
-    };
-      
-  // Handle adding or updating a task
-  const onSave = (updatedTask: CustomTask) => {
-    if (!updatedTask?.title.trim()) return;
-
-    const newTask = {
-      id: editingTask ? editingTask.id : tasks.length + 1, // Use existing ID for updates
-      title: updatedTask.title,
-      description: updatedTask.description,
-      status: "pending", // Default status
+        setModalVisible(false);
     };
 
-    addOrUpdateTask(newTask);
-  };
+    const onSave = (updatedTask: CustomTask) => {
+        if (!updatedTask?.title.trim()) return;
 
-  console.log("RENDER");
-  return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "auto" }}>
-      <TasksList tasks={tasks} onEdit={startEditing}/>
+        const newTask = {
+            id: editingTask ? editingTask.id : tasks.length + 1,
+            title: updatedTask.title,
+            description: updatedTask.description,
+            status: "pending",
+        };
 
-      {!editingTask && <AddOrEditDialog header="Add Task" saveButtonText= "Add Task" onSave={onSave} onCancel={resetForm} />}
-      {editingTask && editingTask.id && <AddOrEditDialog header="Edit Task" task={editingTask} saveButtonText= "Update Task"  onSave={onSave} onCancel={resetForm} />}     
-    </div>
-  );
+        addOrUpdateTask(newTask).then(resetForm);
+    };
+
+    return (
+        <Layout style={{ minHeight: "100vh", padding: "20px", background: "#fff" }}>
+            <Content
+                style={{
+                    maxWidth: "800px",  // Increased width
+                    width: "100%",  
+                    margin: "auto",
+                    padding: "20px",
+                    background: "#fff",
+                    borderRadius: "8px",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                }}
+            >
+                <TasksList tasks={tasks} onEdit={startEditing} />
+                <Button type="primary" onClick={() => setModalVisible(true)} style={{ marginTop: "20px", width: "100%" }}>
+                    Add Task
+                </Button>
+
+                <AddOrEditDialog visible={modalVisible} task={editingTask} onSave={onSave} onCancel={resetForm} />
+            </Content>
+        </Layout>
+    );
 };
 
 export default TaskManager;
