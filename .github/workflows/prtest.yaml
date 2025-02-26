@@ -6,7 +6,7 @@ on:
       - main
 jobs:
   pytest:
-    name: Running pytests
+    name: Running pytests on Backend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -14,10 +14,23 @@ jobs:
       - name: instal libraries
         run: |
           pip install -r backend_app/requirements.txt
-      - name: Running app
+      - name: Running backend app
         run: |
           cd backend_app/
           uvicorn src.main:app &
-      - name: Running test
+      - name: Running backend tests
         run: |
           pytest -v
+  vitest:
+    name: Running vitest on Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: instal libraries
+        run: |
+          cd frontend_app/
+          npm install
+      - name: Running frontend tests
+        run: |
+          npm run test
