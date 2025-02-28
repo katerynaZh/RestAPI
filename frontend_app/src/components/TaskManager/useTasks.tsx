@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { notification, Button } from 'antd';
 
 export type CustomTask = {
   id: number;
@@ -19,8 +20,15 @@ const useTasks = () => {
         setTasks(response.data);
         console.log('render');
       })
-      .catch((error) => console.error('Error fetching tasks:', error));
+      .catch((error) => {
+        notification.error({
+          message: 'Error fetching tasks',
+          description: `Tasks loading failed with error: ${error.message}`,
+          duration: 3, // Auto-dismiss in 3 seconds
+        });
+      });
   }, []);
+
   // Handle adding or updating a task
   const addOrUpdateTask = (newTask: CustomTask) => {
     return axios
@@ -31,12 +39,14 @@ const useTasks = () => {
           : [...tasks, response.data]; // Add new task
 
         setTasks(updatedTasks);
-        // onSave();
         return response.data;
       })
       .catch((error) => {
-        console.error('Error saving task:', error);
-        // onError();
+        notification.error({
+          message: 'Error saving task',
+          description: `Saving task failed with error: ${error.message}`,
+          duration: 3, // Auto-dismiss in 3 seconds
+        });
       });
   };
 

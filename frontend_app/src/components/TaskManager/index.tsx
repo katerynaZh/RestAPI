@@ -8,29 +8,30 @@ import styled from 'styled-components';
 const TaskManager = () => {
   const { tasks, addOrUpdateTask } = useTasks();
   const [editingTask, setEditingTask] = useState<CustomTask | undefined>();
-  const [modalVisible, setModalVisible] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
+    if (tasks.length === 0) return;
+
     resetForm();
   }, [tasks]);
 
   const startEditing = (task: CustomTask) => {
     setEditingTask(task);
-    setModalVisible(true);
+    setIsDialogOpen(true);
   };
 
   const resetForm = () => {
     setEditingTask(undefined);
-    setModalVisible(false);
+    setIsDialogOpen(false);
   };
 
   const onSave = (updatedTask: CustomTask) => {
     if (!updatedTask?.title.trim()) return;
 
     const newTask = {
-      id: editingTask ? editingTask.id : tasks.length + 1,
-      title: updatedTask.title,
-      description: updatedTask.description,
+      ...updatedTask,
+      id: updatedTask.id ?? tasks.length + 1,
       status: 'pending',
     };
 
@@ -41,11 +42,11 @@ const TaskManager = () => {
     <StyledLayout>
       <StyledContent>
         <TasksList tasks={tasks} onEdit={startEditing} />
-        <StyledButton type="primary" onClick={() => setModalVisible(true)}>
+        <StyledButton type="primary" onClick={() => setIsDialogOpen(true)}>
           Add Task
         </StyledButton>
         <AddOrEditDialog
-          visible={modalVisible}
+          open={isDialogOpen}
           task={editingTask}
           onSave={onSave}
           onCancel={resetForm}
