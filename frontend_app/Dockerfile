@@ -11,7 +11,10 @@ COPY package*.json ./
 RUN npm install
 
 # Copy the rest of the application
-COPY . .
+COPY ./vite.config.js .
+COPY ./settings.json .
+COPY ./index.html .
+COPY ./src ./src
 
 # Expose Vite's default dev port
 EXPOSE 3000
