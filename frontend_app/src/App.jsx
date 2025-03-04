@@ -1,10 +1,7 @@
-import React from "react";
-import TaskManager from "./taskManager";
+import { TaskManager } from './components';
 
 function App() {
-  return (
-    <TaskManager/>
-  );
+  return <TaskManager />;
 }
 
 export default App;
