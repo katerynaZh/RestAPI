@@ -18,3 +18,15 @@ def create_task(task: Task):
             return task
     tasks_db.append(task)
     return task
+
+@router.delete("/tasks")
+def delete_task(id: int):
+    task_deleted=False
+    for i, existing_task in enumerate(tasks_db):
+        if existing_task.id == id:
+            del tasks_db[i]
+            task_deleted=True
+            # tasks_db[i] = task
+            # return task
+    # tasks_db.append(task)
+    return task_deleted
