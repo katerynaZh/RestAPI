@@ -19,7 +19,7 @@ def test_delete_task():
     assert response.status_code == 200
 
     # Delete the task
-    response = client.delete("/tasks", params={"id": 1})
+    response = client.delete("/tasks", params={"task_id": 1})
     assert response.status_code == 200
     assert response.json() is True
 
@@ -31,6 +31,6 @@ def test_delete_task():
 
 def test_delete_non_existent_task():
     """Test deleting a non-existent task."""
-    response = client.delete("/tasks", params={"id": 999})
+    response = client.delete("/tasks", params={"task_id": 999})
     assert response.status_code == 200
     assert response.json() is False
