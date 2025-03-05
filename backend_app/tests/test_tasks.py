@@ -3,11 +3,13 @@ from src.main import app
 
 client = TestClient(app)
 
+
 def test_read_root():
     """Test the root endpoint '/'."""
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"message": "Hello, FastAPI!"}
+
 
 def test_delete_task():
     """Test the delete task endpoint '/tasks'."""
@@ -25,6 +27,7 @@ def test_delete_task():
     response = client.get("/tasks")
     assert response.status_code == 200
     assert len(response.json()) == 0
+
 
 def test_delete_non_existent_task():
     """Test deleting a non-existent task."""
