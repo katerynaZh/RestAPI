@@ -13,7 +13,9 @@ def test_delete_task():
     """Test the delete task endpoint '/tasks'."""
     # Create a task to delete
     task = {"id": 1, "title": "Test Task", "description": "This is a test task"}
-    client.post("/tasks", json=task)
+    response = client.post("/tasks", json=task)
+    assert response.status_code == 200
+    assert response.json() is task
 
     # Delete the task
     response = client.delete("/tasks", params={"id": 1})
