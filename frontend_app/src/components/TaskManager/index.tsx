@@ -6,7 +6,7 @@ import AddOrEditDialog from './AddOrEditDialog';
 import styled from 'styled-components';
 
 const TaskManager = () => {
-  const { tasks, addOrUpdateTask } = useTasks();
+  const { tasks, addOrUpdateTask, deleteTask } = useTasks();
   const [editingTask, setEditingTask] = useState<CustomTask | undefined>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -38,10 +38,15 @@ const TaskManager = () => {
     addOrUpdateTask(newTask).then(resetForm);
   };
 
+  const onDelete = (taskId: number) => {
+    deleteTask(taskId);
+  };
+
+
   return (
     <StyledLayout>
       <StyledContent>
-        <TasksList tasks={tasks} onEdit={startEditing} />
+        <TasksList tasks={tasks} onEdit={startEditing} onDelete={onDelete} />
         <StyledButton type="primary" onClick={() => setIsDialogOpen(true)}>
           Add Task
         </StyledButton>
