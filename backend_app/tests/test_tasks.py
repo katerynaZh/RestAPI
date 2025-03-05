@@ -15,7 +15,6 @@ def test_delete_task():
     task = {"id": 1, "title": "Test Task", "description": "This is a test task", "status":"pending"}
     response = client.post("/tasks", json=task)
     assert response.status_code == 200
-    # assert response.json() is task
 
     # Delete the task
     response = client.delete("/tasks", params={"id": 1})
