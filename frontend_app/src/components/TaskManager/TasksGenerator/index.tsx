@@ -7,15 +7,17 @@ const { Item } = Form;
 const TasksGenerator = () => {
     const [form] = Form.useForm();
 
-    const finishHandler = () => {
-        console.log('clicked')
+    const finishHandler = (values) => {
+        if (!values || !values.goal) return;
+
+        
     }
 
     return (
         <StyledDiv>
             <Form form={form} layout="inline" onFinish={finishHandler}>
-                <Item>
-                    <StyledInput  placeholder="What is your goal today?" />
+                <Item name="goal">
+                    <StyledInput placeholder="What is your goal today?" />
                 </Item>
                 <Item>
                     <Button type="primary" htmlType="submit">
