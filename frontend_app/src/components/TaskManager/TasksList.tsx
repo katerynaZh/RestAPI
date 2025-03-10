@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { List, Button } from 'antd';
+import { List, Button, Typography } from 'antd';
 import { CustomTask } from './useTasks';
-import { Typography } from 'antd';
 
 const { Text, Title } = Typography;
 
@@ -23,7 +22,7 @@ const TasksList = ({ tasks, onEdit }: Props) => {
         return (
           <StyledListItem
             actions={[
-              <Button type="link" onClick={() => onEdit(typedTask)}>
+              <Button key={1} type="link" onClick={() => onEdit(typedTask)}>
                 Edit
               </Button>,
             ]}

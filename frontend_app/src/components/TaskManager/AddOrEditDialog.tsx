@@ -37,7 +37,7 @@ const AddOrEditDialog = ({ open, task, onSave, onCancel }: Props) => {
       submitLabel={task ? 'Save' : 'Add'}
       onSubmit={handleSave}
       onCancel={onCancel}
-      children={
+      >
         <Form form={form} layout="vertical">
           <Item
             name="title"
@@ -49,9 +49,8 @@ const AddOrEditDialog = ({ open, task, onSave, onCancel }: Props) => {
           <Item name="description" label="Description">
             <TextArea rows={3} placeholder="Enter task description" />
           </Item>
-        </Form>
-      }
-    />
+        </Form>      
+    </Dialog>
   );
 };
 

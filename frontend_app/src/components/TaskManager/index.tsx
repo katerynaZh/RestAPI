@@ -13,20 +13,20 @@ const TaskManager = () => {
   useEffect(() => {
     if (tasks.length === 0) return;
 
-    resetForm();
+    handleFormReset();
   }, [tasks]);
 
-  const startEditing = (task: CustomTask) => {
+  const handleEditStart = (task: CustomTask) => {
     setEditingTask(task);
     setIsDialogOpen(true);
   };
 
-  const resetForm = () => {
+  const handleFormReset = () => {
     setEditingTask(undefined);
     setIsDialogOpen(false);
   };
 
-  const onSave = (updatedTask: CustomTask) => {
+  const handleSave = (updatedTask: CustomTask) => {
     if (!updatedTask?.title.trim()) return;
 
     const newTask = {
@@ -35,21 +35,21 @@ const TaskManager = () => {
       status: 'pending',
     };
 
-    addOrUpdateTask(newTask).then(resetForm);
+    addOrUpdateTask(newTask).then(handleFormReset);
   };
 
   return (
     <StyledLayout>
       <StyledContent>
-        <TasksList tasks={tasks} onEdit={startEditing} />
+        <TasksList tasks={tasks} onEdit={handleEditStart} />
         <StyledButton type="primary" onClick={() => setIsDialogOpen(true)}>
           Add Task
         </StyledButton>
         <AddOrEditDialog
           open={isDialogOpen}
           task={editingTask}
-          onSave={onSave}
-          onCancel={resetForm}
+          onSave={handleSave}
+          onCancel={handleFormReset}
         />
       </StyledContent>
     </StyledLayout>

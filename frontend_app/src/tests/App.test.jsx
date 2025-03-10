@@ -2,7 +2,7 @@ import { test, expect, vi } from "vitest"; // ✅ Import only what we need
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 // import "@testing-library/jest-dom"; // ✅ Ensures matchers are loaded
 import App from "../App";
-import TaskManager from "../taskManager";
+import TaskManager from "../components/TaskManager";
 
 
 // ✅ Mock axios properly
