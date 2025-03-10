@@ -10,7 +10,7 @@ const TasksGenerator = () => {
     const finishHandler = (values) => {
         if (!values || !values.goal) return;
 
-        
+        console.log(values.goal); // TODO: add request to OpenAI API
     }
 
     return (
