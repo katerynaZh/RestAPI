@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Layout } from 'antd';
-import useTasks, { CustomTask } from './useTasks';
+import useTasks, { CustomTask } from './api/useTasks'; //'../../mocked/useTasks';
 import TasksList from './TasksList';
 import AddOrEditDialog from './AddOrEditDialog';
 import styled from 'styled-components';

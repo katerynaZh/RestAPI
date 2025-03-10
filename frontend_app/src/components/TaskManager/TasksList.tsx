@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { List, Button, Typography } from 'antd';
-import { CustomTask } from './useTasks';
+import { CustomTask } from './api/useTasks';
 
 const { Text, Title } = Typography;
 
