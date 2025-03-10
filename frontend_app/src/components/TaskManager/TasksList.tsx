@@ -18,6 +18,7 @@ const TasksList = ({ tasks, onEdit }: Props) => {
       dataSource={tasks}
       renderItem={(task) => {
         const typedTask = task as CustomTask;
+        const {title, description, status} = typedTask;
 
         return (
           <StyledListItem
@@ -28,10 +29,10 @@ const TasksList = ({ tasks, onEdit }: Props) => {
             ]}
           >
             <TaskDetails>
-              <Text strong>{typedTask.title}</Text>
-              <Typography>{typedTask.description}</Typography>
+              <Text strong>{title}</Text>
+              <Typography>{description}</Typography>
             </TaskDetails>
-            <StatusText>{typedTask.status}</StatusText>
+            <StatusText>{status}</StatusText>
           </StyledListItem>
         );
       }}
