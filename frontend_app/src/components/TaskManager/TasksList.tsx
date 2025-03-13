@@ -19,6 +19,7 @@ const TasksList = ({
 }: Props) => {
   return (
     <StyledList
+      data-testid="tasks-list"
       header={<Title level={2}>Task List</Title>}
       bordered
       dataSource={tasks}
