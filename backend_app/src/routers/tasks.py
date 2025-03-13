@@ -38,8 +38,8 @@ def delete_task(task_id: int):
     """
     task_deleted = False
     for i, existing_task in enumerate(tasks_db):
-        if existing_task.id == task_id:
+        if existing_task.id == task_id or existing_task.parent == task_id:
             del tasks_db[i]
             task_deleted = True
-            break
+            continue
     return task_deleted

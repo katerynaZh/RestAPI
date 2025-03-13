@@ -13,14 +13,16 @@ pip install -r backend_app/requirements.txt
 Debug mode:
 
 ```bash
-uvicorn backend_app.main:app --reload
+cd backend-app
+uvicorn src.main:app --reload
 
 ```
 
 Runnning as a service (not waiting in the console):
 
 ```bash
-uvicorn backend_app.main:app &
+cd backend-app
+uvicorn src.main:app &
 ```
 
 ## Tests execution
@@ -39,6 +41,5 @@ docker run -p 8000:80  backend_app
 
 ```bash
 cd frontend_app
-docker build -t frontend_app .
-docker run -p 3000:5173  frontend_app
+docker build -t frontend_app .docker run -p 3000:5173  frontend_app
 ```

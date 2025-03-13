@@ -1,8 +1,9 @@
 from pydantic import BaseModel, Field, ConfigDict
+
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String
 from src.database import Base  # ✅ Import Base from database.py
-
+from uuid import UUID
 # ✅ SQLAlchemy Database Model (Mapped class)
 class TaskDB(Base):
     __tablename__ = "tasks"
@@ -14,9 +15,9 @@ class TaskDB(Base):
 
 # ✅ Pydantic Schema (for API validation)
 class Task(BaseModel):
-    id: int
+    id: UUID
     title: str = Field(..., max_length=100)
     description: str = Field(None, max_length=300)
     status: str = Field(..., pattern="^(pending|completed)$")
-
+    parent: UUID = None
     model_config = ConfigDict(from_attributes=True)
