@@ -49,8 +49,23 @@ const useTasks = () => {
         });
       });
   };
-
-  return { tasks, addOrUpdateTask };
+  const deleteTask = (taskId: number) => {
+    return axios
+      .delete('http://localhost:8000/tasks?task_id=' + taskId)
+      .then((response) => {
+        const updatedTasks = tasks.filter((task) => task.id !== taskId);
+        setTasks(updatedTasks);
+        return response.data;
+      })
+      .catch((error) => {
+        notification.error({
+          message: 'Error saving task',
+          description: `Saving task failed with error: ${error.message}`,
+          duration: 3, // Auto-dismiss in 3 seconds
+        });
+      });
+  };
+  return { tasks, addOrUpdateTask, deleteTask };
 };
 
 export default useTasks;

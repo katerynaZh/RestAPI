@@ -9,11 +9,17 @@ const { Text, Title } = Typography;
 type Props = {
   tasks?: CustomTask[];
   onEdit: (task: CustomTask) => void;
+  onDelete: (task_id: number) => void;
 };
 
-const TasksList = ({ tasks, onEdit }: Props) => {
+const TasksList = ({
+  tasks,
+  onEdit, 
+  onDelete,
+}: Props) => {
   return (
     <StyledList
+      data-testid="tasks-list"
       header={<Title level={2}>Task List</Title>}
       bordered
       dataSource={tasks}
@@ -25,6 +31,9 @@ const TasksList = ({ tasks, onEdit }: Props) => {
             actions={[
               <Button type="link" onClick={() => onEdit(typedTask)}>
                 Edit
+              </Button>,
+              <Button type="link" onClick={() => onDelete(typedTask.id)}>
+                Delete
               </Button>,
             ]}
           >
