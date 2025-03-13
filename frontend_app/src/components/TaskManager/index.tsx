@@ -4,12 +4,14 @@ import useTasks, { CustomTask } from './useTasks';
 import TasksList from './TasksList';
 import AddOrEditDialog from './AddOrEditDialog';
 import styled from 'styled-components';
+import Dialog from '../common/Dialog';
 
 const TaskManager = () => {
   const { tasks, addOrUpdateTask, deleteTask } = useTasks();
   const [editingTask, setEditingTask] = useState<CustomTask | undefined>();
+  const [delTaskid, setdelTaskid] = useState<number | undefined>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
+  const [isDelConfirmOpen, setIsDelConfirmOpen] = useState(false);
   useEffect(() => {
     if (tasks.length === 0) return;
 
@@ -39,8 +41,20 @@ const TaskManager = () => {
   };
 
   const onDelete = (taskId: number) => {
-    deleteTask(taskId);
+    setdelTaskid(taskId);
+    setIsDelConfirmOpen(true);
   };
+
+  const handleDeleteTask = () => { 
+    if (!delTaskid) return;
+    deleteTask(delTaskid)
+    setIsDelConfirmOpen(false);
+  }
+
+  const handleCanceleTask = () => { 
+    setdelTaskid(undefined);
+    setIsDelConfirmOpen(false);
+  }
 
 
   return (
@@ -55,6 +69,16 @@ const TaskManager = () => {
           task={editingTask}
           onSave={onSave}
           onCancel={resetForm}
+        />
+        <Dialog
+          open={isDelConfirmOpen}
+          title={'Delete Task'}
+          submitLabel={'Delete'}
+          onSubmit={handleDeleteTask}
+          onCancel={handleCanceleTask}
+          children={
+          <p>Are you sure you want to delete this task?</p>
+          }
         />
       </StyledContent>
     </StyledLayout>
