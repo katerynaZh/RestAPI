@@ -56,6 +56,8 @@ const TaskManager = () => {
     setIsDelConfirmOpen(false);
   }
 
+  const delTitle = tasks?.find((task) => task.id === delTaskid)?.title; // this is the best way to get the title of the task to be deleted
+
 
   return (
     <StyledLayout>
@@ -77,7 +79,7 @@ const TaskManager = () => {
           onSubmit={handleDeleteTask}
           onCancel={handleCanceleTask}
           children={
-          <p>Are you sure you want to delete this task?</p>
+          <p>Are you sure you want to delete {delTitle} task?</p>
           }
         />
       </StyledContent>
