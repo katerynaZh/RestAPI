@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Input, Form } from 'antd';
-import { CustomTask } from './useTasks';
+import { CustomTask } from './types';
 import Dialog from '../common/Dialog';
 
 const { Item } = Form;

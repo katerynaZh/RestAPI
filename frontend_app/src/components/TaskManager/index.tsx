@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Layout } from 'antd';
-import useTasks, { CustomTask } from './useTasks';
+import useTasks from './api/useTasks';
+import { CustomTask } from './types';
 import TasksList from './TasksList';
 import AddOrEditDialog from './AddOrEditDialog';
 import styled from 'styled-components';
@@ -8,7 +9,8 @@ import Dialog from '../common/Dialog';
 
 const TaskManager = () => {
   const { tasks, addOrUpdateTask, deleteTask } = useTasks();
-  const [editingTask, setEditingTask] = useState<CustomTask | undefined>();
+
+  const [taskInEditId, setTaskInEditId] = useState<number | undefined>();
   const [delTaskid, setdelTaskid] = useState<number | undefined>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDelConfirmOpen, setIsDelConfirmOpen] = useState(false);
@@ -18,13 +20,13 @@ const TaskManager = () => {
     resetForm();
   }, [tasks]);
 
-  const startEditing = (task: CustomTask) => {
-    setEditingTask(task);
+  const startEditing = (taskId: number) => {
+    setTaskInEditId(taskId);
     setIsDialogOpen(true);
   };
 
   const resetForm = () => {
-    setEditingTask(undefined);
+    setTaskInEditId(undefined);
     setIsDialogOpen(false);
   };
 
@@ -56,8 +58,8 @@ const TaskManager = () => {
     setIsDelConfirmOpen(false);
   }
 
+  const taskInEdit = tasks?.find((task) => task.id === taskInEditId);
   const delTitle = tasks?.find((task) => task.id === delTaskid)?.title; // this is the best way to get the title of the task to be deleted
-
 
   return (
     <StyledLayout>
@@ -68,7 +70,7 @@ const TaskManager = () => {
         </StyledButton>
         <AddOrEditDialog
           open={isDialogOpen}
-          task={editingTask}
+          task={taskInEdit}
           onSave={onSave}
           onCancel={resetForm}
         />
