@@ -13,7 +13,7 @@ const TaskManager = () => {
   const [taskInEditId, setTaskInEditId] = useState<number | undefined>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const {open: openConfirmDialog, close: closeConfirmDialog} = useConfirmationDialog();
+  const {openConfirmation, closeConfirmation} = useConfirmationDialog();
 
   useEffect(() => {
     if (tasks.length === 0) return;
@@ -46,22 +46,18 @@ const TaskManager = () => {
   const onDelete = (taskId: number) => {
     const delTitle = tasks?.find((task) => task.id === taskId)?.title; 
 
-    openConfirmDialog({
+    openConfirmation({
         title:'Delete Task',
         confirmLabel:'Delete',
         text:`Are you sure you want to delete ${delTitle} task?`,  
         onConfirm: () => handleDeleteTask(taskId),
-        onCancel: handleCanceleTask,     
+        onCancel: closeConfirmation,     
     });
   };
 
   const handleDeleteTask = (taskId: number) => { 
     deleteTask(taskId)
-    closeConfirmDialog();
-  }
-
-  const handleCanceleTask = () => { 
-    closeConfirmDialog();
+    closeConfirmation();
   }
 
   const taskInEdit = tasks?.find((task) => task.id === taskInEditId);

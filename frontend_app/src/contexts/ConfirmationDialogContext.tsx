@@ -10,8 +10,8 @@ type DialogProps = {
 };
 
 type ConfirmationDialogContextType = {
-  open: (props: DialogProps) => void;
-  close: () => void;
+  openConfirmation: (props: DialogProps) => void;
+  closeConfirmation: () => void;
 }
 
 export const ConfirmationDialogContext = createContext<ConfirmationDialogContextType>({} as ConfirmationDialogContextType);
@@ -20,17 +20,17 @@ export const ConfirmationDialogProvider = ({children}) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogProps | null>(null);
 
-  const open = ({ title, text, confirmLabel, onConfirm, onCancel }: DialogProps) => {
+  const openConfirmation = ({ title, text, confirmLabel, onConfirm, onCancel }: DialogProps) => {
     setDialogProps({ title, text, confirmLabel, onConfirm, onCancel });
     setIsDialogOpen(true);
   };
 
-  const close = () => {
+  const closeConfirmation = () => {
     setIsDialogOpen(false);
     setDialogProps(null);
   };
 
-  const value: ConfirmationDialogContextType = {open, close};
+  const value: ConfirmationDialogContextType = {openConfirmation, closeConfirmation};
 
   return <>
     <ConfirmationDialogContext.Provider value={value}>
