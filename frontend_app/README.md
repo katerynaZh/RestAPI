@@ -16,3 +16,21 @@ To run from the Docker container you can use the following commands (from the fr
 docker build -t frontend-app .
 docker run -p 5173:5173 --rm frontend-app
 ```
+
+
+How to use confirmation dialog in your component: 
+
+```
+    // use hook in your component (hook is a function that starts from 'use' word)
+    const {openConfirmation, closeConfirmation} = useConfirmationDialog();
+    ...
+    //execute openConfirmation function, f.ex like this: 
+    openConfirmation({
+        title:'Delete Task',
+        confirmLabel:'Delete',
+        text:`Are you sure you want to delete ${delTitle} task?`,  
+        onConfirm: () => handleDeleteTask(taskId),
+        onCancel: closeConfirmation,     
+    });
+```
+
