@@ -1,7 +1,10 @@
 import { TaskManager } from './components';
+import { ConfirmationDialogProvider } from './contexts';
 
 function App() {
-  return <TaskManager />;
+  return <ConfirmationDialogProvider>
+    <TaskManager />
+  </ConfirmationDialogProvider>;
 }
 
 export default App;

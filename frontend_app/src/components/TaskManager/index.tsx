@@ -5,15 +5,16 @@ import { CustomTask } from './types';
 import TasksList from './TasksList';
 import AddOrEditDialog from './AddOrEditDialog';
 import styled from 'styled-components';
-import Dialog from '../common/Dialog';
+import { useConfirmationDialog } from '../../contexts/ConfirmationDialogContext';
 
 const TaskManager = () => {
   const { tasks, addOrUpdateTask, deleteTask } = useTasks();
 
   const [taskInEditId, setTaskInEditId] = useState<number | undefined>();
-  const [delTaskid, setdelTaskid] = useState<number | undefined>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isDelConfirmOpen, setIsDelConfirmOpen] = useState(false);
+
+  const {open: openConfirmDialog, close: closeConfirmDialog} = useConfirmationDialog();
+
   useEffect(() => {
     if (tasks.length === 0) return;
 
@@ -43,24 +44,28 @@ const TaskManager = () => {
   };
 
   const onDelete = (taskId: number) => {
-    setdelTaskid(taskId);
-    setIsDelConfirmOpen(true);
+    const delTitle = tasks?.find((task) => task.id === taskId)?.title; 
+
+    openConfirmDialog({
+        title:'Delete Task',
+        confirmLabel:'Delete',
+        text:`Are you sure you want to delete ${delTitle} task?`,  
+        onConfirm: () => handleDeleteTask(taskId),
+        onCancel: handleCanceleTask,     
+    });
   };
 
-  const handleDeleteTask = () => { 
-    if (!delTaskid) return;
-    deleteTask(delTaskid)
-    setIsDelConfirmOpen(false);
+  const handleDeleteTask = (taskId: number) => { 
+    deleteTask(taskId)
+    closeConfirmDialog();
   }
 
   const handleCanceleTask = () => { 
-    setdelTaskid(undefined);
-    setIsDelConfirmOpen(false);
+    closeConfirmDialog();
   }
 
   const taskInEdit = tasks?.find((task) => task.id === taskInEditId);
-  const delTitle = tasks?.find((task) => task.id === delTaskid)?.title; // this is the best way to get the title of the task to be deleted
-
+ 
   return (
     <StyledLayout>
       <StyledContent>
@@ -73,16 +78,6 @@ const TaskManager = () => {
           task={taskInEdit}
           onSave={onSave}
           onCancel={resetForm}
-        />
-        <Dialog
-          open={isDelConfirmOpen}
-          title={'Delete Task'}
-          submitLabel={'Delete'}
-          onSubmit={handleDeleteTask}
-          onCancel={handleCanceleTask}
-          children={
-          <p>Are you sure you want to delete {delTitle} task?</p>
-          }
         />
       </StyledContent>
     </StyledLayout>
