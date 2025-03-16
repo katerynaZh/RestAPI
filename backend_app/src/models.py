@@ -1,23 +1,16 @@
+from uuid import UUID
+from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
 
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String
-from src.database import Base  # ✅ Import Base from database.py
-from uuid import UUID
-# ✅ SQLAlchemy Database Model (Mapped class)
-class TaskDB(Base):
-    __tablename__ = "tasks"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    title: Mapped[str] = mapped_column(String(100))
-    description: Mapped[str] = mapped_column(String(300))
-    status: Mapped[str] = mapped_column(String(20))
+# ✅ Pydantic Schema ()
+class BaseTask(BaseModel):
+    title: str = Field(..., max_length=100)
+    description: Optional[str] = Field(None, max_length=300)
+    parent: Optional[UUID] = None
+    model_config = ConfigDict(from_attributes=True)
 
 # ✅ Pydantic Schema (for API validation)
-class Task(BaseModel):
+class Task(BaseTask):
     id: UUID
-    title: str = Field(..., max_length=100)
-    description: str = Field(None, max_length=300)
-    status: str = Field(..., pattern="^(pending|completed)$")
-    parent: UUID = None
-    model_config = ConfigDict(from_attributes=True)
+    status: str = Field("pending", pattern="^(pending|in-progress|completed)$")

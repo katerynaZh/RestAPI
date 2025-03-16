@@ -1,5 +1,6 @@
-from fastapi import APIRouter
-from src.models import Task
+from fastapi import APIRouter, HTTPException
+from uuid import uuid4
+from src.models import Task, BaseTask
 
 router = APIRouter()
 
@@ -13,21 +14,49 @@ def get_tasks():
     return tasks_db
 
 
-@router.post("/tasks")
-def create_task(task: Task):
+@router.patch("/task")
+def update_task(task: Task):
     """
     Endpoint for creating and modifying tasks
     Expected json input:
-      '{"id":1,"title":"Test Title","description":"Best description ever","status":"pending"}'
+      '{"id":"UUID str","title":"str","description":"str","status":"pending"}'
     """
     for i, existing_task in enumerate(tasks_db):
         if existing_task.id == task.id:
-            # if task already exists - update it
+            # If task exists - update it
             tasks_db[i] = task
             return task
-    # if task does not exist - create it
-    tasks_db.append(task)
-    return task
+
+    # If task does not exist - raise an error
+    raise HTTPException(
+        status_code=404,
+        detail=f"Task with id '{task.id}' not found"
+    )
+
+
+@router.post("/task")
+def create_task(task: BaseTask):
+    """
+    Endpoint for creating a task
+    Expected json input:
+      '{"title":"str","description":"str","parent":"[optional] UUID str"}'
+    """
+    if task.parent:
+        # Check if parent task exists
+        parent_task = next((t for t in tasks_db if t.id == task.parent), None)
+        if not parent_task:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Parent task with id '{task.parent}' not found"
+            )
+    new_task = Task(
+        id=uuid4(),          # Generate a new UUID for the task
+        status="pending",    # Default status
+        **task.model_dump()  # Copy title, description, parent from BaseTask
+    )
+
+    tasks_db.append(new_task)
+    return new_task
 
 
 @router.delete("/tasks")

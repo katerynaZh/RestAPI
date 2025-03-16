@@ -13,7 +13,7 @@ pip install -r backend_app/requirements.txt
 Debug mode:
 
 ```bash
-cd backend-app
+cd backend_app
 uvicorn src.main:app --reload
 
 ```
@@ -21,7 +21,7 @@ uvicorn src.main:app --reload
 Runnning as a service (not waiting in the console):
 
 ```bash
-cd backend-app
+cd backend_app
 uvicorn src.main:app &
 ```
 
