@@ -12,8 +12,8 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all headers
 )
 
-
-app.include_router(tasks.router)
+# In case of migration to newer API version it should be updated here
+app.include_router(tasks.v1_router)
 
 @app.get("/")
 def read_root():
