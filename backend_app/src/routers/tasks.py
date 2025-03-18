@@ -7,11 +7,20 @@ router = APIRouter()
 # Fake DB
 tasks_db: list[Task] = []
 
-
 @router.get("/tasks")
-def get_tasks():
-    """Endpoint to get all tasks"""
-    return tasks_db
+def get_tasks(output_format: str = "json"):
+    """
+        Endpoint to get all tasks
+    """
+    allowed_formats = ['json', 'json+children', 'json+tree']
+    if output_format == "json":
+        return tasks_db
+    else:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unknown output format '{output_format}'. \
+                     Select one from the list: {', '.join(allowed_formats)}"
+        )
 
 
 @router.patch("/task")
