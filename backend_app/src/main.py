@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from backend_app.src.routers.v1 import tasks as v1_tasks
+from src.routers.v1 import tasks as v1_tasks
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
