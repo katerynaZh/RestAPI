@@ -5,7 +5,7 @@ from src.models import Task, BaseTask
 from src.formating import JsonChildren, JsonTree
 
 # In case if needed we could deal with multi version env and migrate to the new API
-v1_router = APIRouter(prefix="/v1")
+router = APIRouter(prefix="/v1")
 
 # Fake DB
 tasks_db: list[Task] = []
@@ -13,7 +13,7 @@ json_children = JsonChildren()
 json_tree = JsonTree()
 
 
-@v1_router.get("/tasks")
+@router.get("/tasks")
 def get_tasks(content_type: Optional[str] = Header("application/json")):
     """
     Endpoint to get all tasks
@@ -42,7 +42,7 @@ def get_tasks(content_type: Optional[str] = Header("application/json")):
         )
 
 
-@v1_router.patch("/tasks")
+@router.patch("/tasks")
 def update_task(task: Task):
     """
     Endpoint for creating and modifying tasks
@@ -63,7 +63,7 @@ def update_task(task: Task):
     )
 
 
-@v1_router.post("/tasks")
+@router.post("/tasks")
 def create_task(task: BaseTask):
     """
     Endpoint for creating a task
@@ -89,7 +89,7 @@ def create_task(task: BaseTask):
     return new_task
 
 
-@v1_router.delete("/tasks")
+@router.delete("/tasks")
 def delete_task(task_id: UUID):
     """
     Endpoint for the cleaning up tasks by id

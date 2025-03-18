@@ -2,7 +2,7 @@
     Module for formatting inputs and outputs
 """
 
-from typing import List, Dict, Optional
+from typing import List, Dict
 from src.models import Task
 
 class JsonChildren():

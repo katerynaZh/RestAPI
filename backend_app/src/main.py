@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.routers import tasks
+from backend_app.src.routers.v1 import tasks as v1_tasks
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -13,8 +13,8 @@ app.add_middleware(
 )
 
 # In case of migration to newer API version it should be updated here
-app.include_router(tasks.v1_router)
+app.include_router(v1_tasks.router)
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello, FastAPI!"}
+    return {"message": "Welcome to RestApi service!"}
