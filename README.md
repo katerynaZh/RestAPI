@@ -41,5 +41,6 @@ docker run -p 8000:80  backend_app
 
 ```bash
 cd frontend_app
-docker build -t frontend_app .docker run -p 3000:5173  frontend_app
+docker build -t frontend_app .
+docker run -p 3000:5173  frontend_app
 ```
