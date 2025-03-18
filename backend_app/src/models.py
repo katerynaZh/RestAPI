@@ -10,6 +10,7 @@ class BaseTask(BaseModel):
     parent: Optional[UUID] = None
     model_config = ConfigDict(from_attributes=True)
 
+
 # ✅ Pydantic Schema (for API validation)
 class Task(BaseTask):
     id: UUID

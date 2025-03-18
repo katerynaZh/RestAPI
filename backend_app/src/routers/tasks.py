@@ -1,29 +1,43 @@
-from fastapi import APIRouter, HTTPException
 from uuid import uuid4
+from typing import Optional
+from fastapi import APIRouter, HTTPException, Header
 from src.models import Task, BaseTask
+from src.formating import JsonChildren, JsonTree
+
 
 router = APIRouter()
 
 # Fake DB
 tasks_db: list[Task] = []
+json_children = JsonChildren()
+json_tree = JsonTree()
+
 
 @router.get("/tasks")
-def get_tasks(output_format: str = "json"):
+def get_tasks(content_type: Optional[str] = Header("application/json")):
     """
         Endpoint to get all tasks
     """
-    allowed_formats = ['json', 'json+children', 'json+tree']
-    if output_format == "json":
+    allowed_formats = [
+        "application/json",
+        "application/json+children",
+        "application/json+tree",
+    ]
+
+    if content_type == "application/json":
         return tasks_db
+    elif content_type == "application/json+children":
+        return json_children.transform(tasks_db)
+    elif content_type == "application/json+tree":
+        return json_tree.transform(tasks_db)
     else:
         raise HTTPException(
             status_code=400,
-            detail=f"Unknown output format '{output_format}'. \
-                     Select one from the list: {', '.join(allowed_formats)}"
+            detail=f"Unknown output format '{content_type}'. Select one from the list: {', '.join(allowed_formats)}"
         )
 
 
-@router.patch("/task")
+@router.patch("/tasks")
 def update_task(task: Task):
     """
     Endpoint for creating and modifying tasks
@@ -43,7 +57,7 @@ def update_task(task: Task):
     )
 
 
-@router.post("/task")
+@router.post("/tasks")
 def create_task(task: BaseTask):
     """
     Endpoint for creating a task
