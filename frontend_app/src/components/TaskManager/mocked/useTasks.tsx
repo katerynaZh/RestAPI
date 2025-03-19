@@ -44,7 +44,7 @@ const MOCK_TASKS: CustomTask[] = [
       id: 5,
       title: 'Review key points for the upcoming client meeting.',
       description:
-        'theam: bulding a new website',
+        'theme: building a new website',
       status: 'completed',
       parentId: 2,
     },
