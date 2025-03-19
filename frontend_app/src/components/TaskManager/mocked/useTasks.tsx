@@ -66,7 +66,7 @@ const MOCK_TASKS: CustomTask[] = [
     },
     {
       id: 8,
-      title: 'Find receipe for dinner',
+      title: 'Find recipe for dinner',
       description:
         'YouTube video',
       status: 'completed',
