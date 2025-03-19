@@ -68,7 +68,7 @@ const MOCK_TASKS: CustomTask[] = [
       id: 8,
       title: 'Find receipe for dinner',
       description:
-        'Youtoob video',
+        'YouTube video',
       status: 'completed',
       parentId: 1,
     },
