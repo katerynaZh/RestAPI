@@ -17,10 +17,10 @@ json_tree = JsonTree()
 def get_tasks(content_type: Optional[str] = Header("application/json")):
     """
     Endpoint to get all tasks
-        curl -H "Content-Type: application/json" -X Get http://localhost:8000/v1/tasks
-        curl -H "Content-Type: application/json+tree" -X Get http://localhost:8000/v1/tasks
+        curl -H "Content-Type: application/json" -X GET http://localhost:8000/v1/tasks
+        curl -H "Content-Type: application/json+tree" -X GET http://localhost:8000/v1/tasks
             *More info in: JsonTree()
-        curl -H "Content-Type: application/json+children" -X Get http://localhost:8000/v1/tasks
+        curl -H "Content-Type: application/json+children" -X GET http://localhost:8000/v1/tasks
             *More info in: JsonChildren()
     """
     allowed_formats = [
@@ -67,7 +67,7 @@ def update_task(task: Task):
 def create_task(task: BaseTask):
     """
     Endpoint for creating a task
-        curl -H "Content-Type: application/json" -d "{json}" -X Post http://localhost:8000/v1/tasks
+        curl -H "Content-Type: application/json" -d "{json}" -X POST http://localhost:8000/v1/tasks
     Expected json input:
       '{"title":"str","description":"str","parent":"[optional] UUID str"}'
     """
@@ -93,7 +93,7 @@ def create_task(task: BaseTask):
 def delete_task(task_id: UUID):
     """
     Endpoint for the cleaning up tasks by id
-        curl -H "Content-Type: application/json"-X Delete http://localhost:8000/v1/tasks?id=UUID
+        curl -H "Content-Type: application/json"-X DELETE http://localhost:8000/v1/tasks?id=UUID
     """
     task_deleted = False
     for i, existing_task in enumerate(tasks_db):
