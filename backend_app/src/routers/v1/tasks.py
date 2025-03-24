@@ -46,7 +46,7 @@ def get_tasks(content_type: Optional[str] = Header("application/json")):
 def update_task(task: Task):
     """
     Endpoint for creating and modifying tasks
-        curl -H "Content-Type: application/json" -d "{json}" -X Patch http://localhost:8000/v1/tasks
+        curl -H "Content-Type: application/json" -d "{json}" -X PATCH http://localhost:8000/v1/tasks
     Expected json input:
       '{"id":"UUID str","title":"str","description":"str","status":"pending"}'
     """
