@@ -14,7 +14,7 @@ def test_read_root():
 def test_delete_task():
     """Test the delete task endpoint '/tasks'."""
     # Create a task to delete
-    task = {"title":"str","description":"str"}
+    task = {"title": "str", "description": "str"}
     response = client.post("/v1/tasks", json=task)
     get_id = response.json().get("id", None)
     assert response.status_code == 200
@@ -35,3 +35,10 @@ def test_delete_non_existent_task():
     response = client.delete("/v1/tasks", params={"task_id": "00000000-0000-0000-0000-000000000000"})
     assert response.status_code == 200
     assert response.json() is False
+
+#  Todo: Test for updating task Create > Update > Check that task was updated
+#  Todo: Tests for creating parent:
+#       > Create 1st task (pre-condition)
+#       > Create 2nd task with the Parent param from the first one (success scenario)
+#       > Create 3rd task with the random uuid as a parent (failure scenario)
+#  Todo: Test for getting response with children and as a tree
