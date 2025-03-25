@@ -112,7 +112,7 @@ const useTasks = () => {
   };
 
   const deleteTask = (taskId: number) => {
-    return new Promise(() => {
+    return new Promise<void>((resolve) => {
       setTimeout(() => {
         setTasks((prevTasks) => {          
           return prevTasks.filter((task) => task.id !== taskId) || [];
