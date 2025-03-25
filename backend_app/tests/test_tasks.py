@@ -36,6 +36,17 @@ def test_delete_non_existent_task():
     assert response.status_code == 200
     assert response.json() is False
 
+
+def test_update_task():
+    """Test updating task."""
+    task = {"title": "str", "description": "str"}
+    response = client.post("/v1/tasks", json=task)
+    assert response.status_code == 200
+    request_json = response.json()
+    request_json["title"] = "new title"
+    response = client.patch("/v1/tasks", json=request_json)
+    assert response.status_code == 200
+
 #  Todo: Test for updating task Create > Update > Check that task was updated
 #  Todo: Tests for creating parent:
 #       > Create 1st task (pre-condition)
