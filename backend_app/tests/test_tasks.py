@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 from src.main import app
+import uuid
 
 client = TestClient(app)
 
@@ -47,9 +48,35 @@ def test_update_task():
     response = client.patch("/v1/tasks", json=request_json)
     assert response.status_code == 200
 
-#  Todo: Test for updating task Create > Update > Check that task was updated
+def test_create_task_with_parent():
+    """Create a first task as a pre-condition."""
+    response = client.post("/v1/tasks", json={"title": "First Task"})
+    assert response.status_code == 200
+    first_task = response.json()
+
+    """Create a second task with the first task as a parent."""
+    response = client.post("/v1/tasks", json={
+        "title": "Second Task", 
+        "parent": first_task["id"]
+    })
+    assert response.status_code ==200
+    second_task = response.json()
+    assert second_task["parent"] == first_task["id"]
+
+
+def test_create_task_with_invalid_parent():
+    """Create a task with a random UUID as a parent (should fail)."""
+    random_parent_id = str(uuid.uuid4())
+    response = client.post("/v1/tasks", json={
+        "title": "Invalid Parent Task", 
+        "parent": random_parent_id
+    })
+    assert response.status_code == 404
+
+
+
 #  Todo: Tests for creating parent:
-#       > Create 1st task (pre-condition)
+#       > Create 1st task (pre-condition)    
 #       > Create 2nd task with the Parent param from the first one (success scenario)
 #       > Create 3rd task with the random uuid as a parent (failure scenario)
 #  Todo: Test for getting response with children and as a tree
