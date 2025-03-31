@@ -49,34 +49,47 @@ def test_update_task():
     assert response.status_code == 200
 
 def test_create_task_with_parent():
-    """Create a first task as a pre-condition."""
+    """
+    Tests for creating parent:
+       > Create 1st task (pre-condition)
+       > Create 2nd task with the Parent param from the first one (success scenario)
+       > Get response with tree output format
+       > Get response with children output format
+    """
+    # First (parent) task
     response = client.post("/v1/tasks", json={"title": "First Task"})
     assert response.status_code == 200
     first_task = response.json()
 
-    """Create a second task with the first task as a parent."""
+    # Create a second task with the first task as a parent.
     response = client.post("/v1/tasks", json={
-        "title": "Second Task", 
+        "title": "Second Task",
         "parent": first_task["id"]
     })
     assert response.status_code ==200
     second_task = response.json()
     assert second_task["parent"] == first_task["id"]
 
+    # Test for getting response with tree output format
+    response = client.get("/v1/tasks", headers={"Content-Type": "application/json+tree"})
+    tree_output = response.json()
+    for obj in tree_output:
+        if obj["id"] == first_task["id"]:
+            assert second_task["id"] in [child["id"] for child in obj["children"]]
+
+    # Test for getting response with children output format
+    response = client.get("/v1/tasks", headers={"Content-Type": "application/json+children"})
+    children_output = response.json()
+    for obj in children_output:
+        if obj["id"] == first_task["id"]:
+            assert second_task["id"] in obj["children"]
+
 
 def test_create_task_with_invalid_parent():
     """Create a task with a random UUID as a parent (should fail)."""
     random_parent_id = str(uuid.uuid4())
     response = client.post("/v1/tasks", json={
-        "title": "Invalid Parent Task", 
+        "title": "Invalid Parent Task",
         "parent": random_parent_id
     })
     assert response.status_code == 404
-
-
-
-#  Todo: Tests for creating parent:
-#       > Create 1st task (pre-condition)    
-#       > Create 2nd task with the Parent param from the first one (success scenario)
-#       > Create 3rd task with the random uuid as a parent (failure scenario)
-#  Todo: Test for getting response with children and as a tree
