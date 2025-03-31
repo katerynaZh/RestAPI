@@ -15,7 +15,7 @@ const useTasks = () => {
   // Fetch tasks from backend
   useEffect(() => {
     axios
-      .get('http://localhost:8000/tasks')
+      .get('http://localhost:8000/v1/tasks')
       .then((response) => {
         setTasks(response.data);
         console.log('render');
@@ -32,7 +32,7 @@ const useTasks = () => {
   // Handle adding or updating a task
   const addOrUpdateTask = (newTask: CustomTask) => {
     return axios
-      .post('http://localhost:8000/tasks', newTask)
+      .post('http://localhost:8000/v1/tasks', newTask)
       .then((response) => {
         const updatedTasks = tasks.some((task) => task.id === newTask.id)
           ? tasks.map((task) => (task.id === newTask.id ? response.data : task)) // Update task
@@ -51,7 +51,7 @@ const useTasks = () => {
   };
   const deleteTask = (taskId: number) => {
     return axios
-      .delete('http://localhost:8000/tasks?task_id=' + taskId)
+      .delete('http://localhost:8000/v1/tasks?task_id=' + taskId)
       .then((response) => {
         const updatedTasks = tasks.filter((task) => task.id !== taskId);
         setTasks(updatedTasks);
