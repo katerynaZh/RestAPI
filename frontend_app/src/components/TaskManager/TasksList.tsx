@@ -8,8 +8,8 @@ const { Text, Title } = Typography;
 
 type Props = {
   tasks?: CustomTask[];
-  onEdit: (taskId: number) => void;
-  onDelete: (task_id: number) => void;
+  onEdit: (taskId: string) => void;
+  onDelete: (task_id: string) => void;
 };
 
 const TasksList = ({

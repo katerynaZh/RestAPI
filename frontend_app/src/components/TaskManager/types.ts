@@ -1,7 +1,13 @@
 export type CustomTask = { 
-    id: number;
+    id: string;
     title: string;
     description: string;
     status: string;
-    parentId?: number;
-  };
+    parent: string;
+};
+  
+export type CustomBaseTask = {
+  title: string;
+  description: string;
+  parent: string;
+};

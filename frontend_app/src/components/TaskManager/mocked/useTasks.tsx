@@ -1,84 +1,87 @@
 import { useState, useEffect } from "react";
-import {CustomTask} from "../types";
+import { CustomTask, CustomBaseTask } from "../types";
+import { v4 as uuidv4 } from 'uuid'; // Import UUID generator
 
 // Mock data
 const MOCK_TASKS: CustomTask[] = [
     {
-      id: 1,
+      id: "a5afa4d4-26df-43d4-9325-7571703b0f57" ,
       title: 'Cook dinner for the family',
       description: '',
       status: 'pending',
+      parent: ''
     },
     {
-      id: 10,
+      id: "b5afa4d4-26df-43d4-9325-7571703b0f57",
       title: 'Buy Groceries',
       description:
         'Pick up milk, eggs, and fresh vegetables from the local market.',
       status: 'pending',
-      parentId: 1,
+      parent: "a5afa4d4-26df-43d4-9325-7571703b0f57",
     },
     {
-      id: 2,
+      id: "74e993cd-0e1d-4c39-ba7d-cfd54b0a7b02",
       title: 'Prepare Presentation',
       description:
         'Draft slides and review key points for the upcoming client meeting.',
-      status: 'completed',      
+      status: 'completed',
+      parent: ''
     },
     {
-      id: 3,
+      id: "82204d4e-e9e9-45fb-9f02-d7cf3f71c2ce",
       title: 'Milk and eggs',
       description:
         '1 liter of milk and eggs',
       status: 'completed',
-      parentId: 1,
+      parent: "a5afa4d4-26df-43d4-9325-7571703b0f57",
     },
     {
-      id: 4,
+      id: "3494f4e4-4b93-4c60-a8c6-bd1a16ea4d73",
       title: 'Fresh vegetables from the local market',
       description:
         'Onions, tomatoes, and bell peppers',
       status: 'completed',
-      parentId: 1,
+      parent: "a5afa4d4-26df-43d4-9325-7571703b0f57",
     },
     {
-      id: 5,
+      id: "6446dfc5-ba14-41dd-8974-654b3cfff231",
       title: 'Review key points for the upcoming client meeting.',
       description:
         'theme: building a new website',
       status: 'completed',
-      parentId: 2,
+      parent: "b5afa4d4-26df-43d4-9325-7571703b0f57",
     },
     {
-      id: 6,
+      id: "f177511a-6fce-4600-93d6-77d7e786b6e3",
       title: 'Create draft slides',
       description:
         'Create draft slides for the upcoming client meeting.',
       status: 'completed',
-      parentId: 2,
+      parent: "b5afa4d4-26df-43d4-9325-7571703b0f57",
     },
     {
-      id: 7,
+      id: "610ba640-8473-4337-947c-ff41ed95af29",
       title: 'Make test slides demo to the team',
       description:
         'Make test slides demo to the team before meeting, to make sure everything is working fine',
       status: 'completed',
-      parentId: 2,
+      parent: "b5afa4d4-26df-43d4-9325-7571703b0f57",
     },
     {
-      id: 8,
+      id: "78b56e79-fffe-4408-a498-85f63712c9d6",
       title: 'Find recipe for dinner',
       description:
         'YouTube video',
       status: 'completed',
-      parentId: 1,
+      parent: "a5afa4d4-26df-43d4-9325-7571703b0f57",
     },
     {
-      id: 9,
+      id: "af87632e-ecaa-4f06-831a-2988736f2256",
       title: 'Make dinner',
       description:
         'Use bought groceries to make dinner',
       status: 'completed',
-      parentId: 1,
+      parent: "a5afa4d4-26df-43d4-9325-7571703b0f57",
     },
   ];
   
@@ -93,25 +96,32 @@ const useTasks = () => {
     }, 500); // Simulating network delay
   }, []);
 
-  // Mock function for adding/updating a task
-  const addOrUpdateTask = (newTask: CustomTask) => {
-    return new Promise<CustomTask>((resolve) => {
-      setTimeout(() => {
-        setTasks((prevTasks) => {
-          const exists = prevTasks.some((task) => task.id === newTask.id);
-          const updatedTasks = exists
-            ? prevTasks.map((task) => (task.id === newTask.id ? newTask : task))
-            : [...prevTasks, { ...newTask, id: prevTasks.length + 1 }];
+ 
+  const addTask = (newTask: CustomBaseTask) => {
+  return new Promise<CustomTask>((resolve) => {
+    setTimeout(() => {
+      const newTaskWithId = { ...newTask, status:"pending", id: uuidv4() }; // Generate a UUID
 
-          return updatedTasks;
-        });
+      setTasks((prevTasks) => [...prevTasks, newTaskWithId]); // Add new task
 
-        resolve(newTask);
-      }, 300); // Simulating API call delay
-    });
-  };
+      resolve(newTaskWithId); // Resolve with new task including UUID
+    }, 300); // Simulating API delay
+  });
+};
 
-  const deleteTask = (taskId: number) => {
+const updateTask = (updatedTask: CustomTask) => {
+  return new Promise<CustomTask>((resolve) => {
+    setTimeout(() => {
+      setTasks((prevTasks) =>
+        prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+      );
+
+      resolve(updatedTask); // Resolve with updated task
+    }, 300); // Simulating API delay
+  });
+};
+
+  const deleteTask = (taskId: string) => {
     return new Promise<void>((resolve) => {
       setTimeout(() => {
         setTasks((prevTasks) => {          
@@ -121,7 +131,7 @@ const useTasks = () => {
     });
   }
 
-  return { tasks, addOrUpdateTask, deleteTask };
+  return { tasks, addTask, updateTask, deleteTask };
 };
 
 export default useTasks;

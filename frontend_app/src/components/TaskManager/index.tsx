@@ -10,7 +10,7 @@ import useTasks from './api/useTasks'; // uncomment this line if you're using th
 // import useTasks from './mocked/useTasks';
 
 // Task type definition (title, id, status, etc.)
-import { CustomTask } from './types';
+import { CustomTask, CustomBaseTask } from './types';
 
 // Components for rendering the task list and the modal dialog
 import TasksList from './TasksList';
@@ -25,10 +25,10 @@ import { useConfirmationDialog } from '../../contexts/ConfirmationDialogContext'
 // Main component that manages the task list
 const TaskManager = () => {
   // Getting the task list and methods for adding/updating/deleting tasks
-  const { tasks, addOrUpdateTask, deleteTask } = useTasks();
+  const { tasks, addTask, updateTask, deleteTask } = useTasks();
 
   // ID of the task being edited (undefined means we're creating a new one)
-  const [taskInEditId, setTaskInEditId] = useState<number | undefined>();
+  const [taskInEditId, setTaskInEditId] = useState<string | undefined>();
 
   // Whether the Add/Edit dialog is open
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -44,7 +44,7 @@ const TaskManager = () => {
   }, [tasks]);
 
   // Start editing a task (open the dialog)
-  const startEditing = (taskId: number) => {
+  const startEditing = (taskId: string) => {
     setTaskInEditId(taskId);
     setIsDialogOpen(true);
   };
@@ -55,24 +55,25 @@ const TaskManager = () => {
     setIsDialogOpen(false);
   };
 
-  // Save a new or updated task
-  const onSave = (updatedTask: CustomTask) => {
+
+
+  const onSave = (updatedTask: CustomTask | CustomBaseTask) => {
     // Do nothing if the title is empty
     if (!updatedTask?.title.trim()) return;
 
-    // Create a new task (or update the existing one)
-    const newTask = {
-      ...updatedTask,
-      id: updatedTask.id ?? tasks.length + 1, // if no id — generate a new one
-      status: 'pending', // default status
-    };
-
-    // Add or update the task, then reset the form
-    addOrUpdateTask(newTask).then(resetForm);
+ 
+    if ('id' in updatedTask && 'status' in updatedTask) {
+      updateTask(updatedTask as CustomTask).then(resetForm);
+    }
+    else { 
+      addTask(updatedTask).then(resetForm);
+    }
   };
 
+
+
   // Handle delete button click
-  const onDelete = (taskId: number) => {
+  const onDelete = (taskId: string) => {
     const delTitle = tasks?.find((task) => task.id === taskId)?.title;
 
     // Open confirmation dialog before deleting
@@ -86,7 +87,7 @@ const TaskManager = () => {
   };
 
   // Delete task and close confirmation
-  const handleDeleteTask = (taskId: number) => {
+  const handleDeleteTask = (taskId: string) => {
     deleteTask(taskId);
     closeConfirmation();
   };
