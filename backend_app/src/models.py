@@ -8,7 +8,7 @@ class BaseTask(BaseModel):
     title: str = Field(..., max_length=100)
     description: Optional[str] = Field(None, max_length=300)
     parent: Optional[UUID] = None
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, extra="forbid")
 
 
 # ✅ Pydantic Schema (for API validation)
