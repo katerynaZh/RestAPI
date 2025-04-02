@@ -5,9 +5,9 @@ import React, { useEffect, useState } from 'react';
 import { Button, Layout } from 'antd';
 
 // Hook for fetching and updating tasks list
-// import useTasks from './api/useTasks'; // uncomment this line if you're using the real BE API
+import useTasks from './api/useTasks'; // uncomment this line if you're using the real BE API
 // uncomment the line below if you want to use mocked data (doesn't require a BE API)
-import useTasks from './mocked/useTasks';
+// import useTasks from './mocked/useTasks';
 
 // Task type definition (title, id, status, etc.)
 import { CustomTask, CustomBaseTask } from './types';
