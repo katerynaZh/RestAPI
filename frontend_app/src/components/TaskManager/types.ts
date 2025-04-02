@@ -1,13 +1,10 @@
-export type CustomTask = { 
-    id: string;
-    title: string;
-    description: string;
-    status: string;
-    parent: string;
-};
-  
-export type CustomBaseTask = {
+export interface CustomBaseTask {
   title: string;
   description: string;
   parent: string;
-};
+}
+
+export interface CustomTask extends CustomBaseTask {
+  id: string;
+  status: string;
+}

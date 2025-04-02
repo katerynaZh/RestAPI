@@ -5,9 +5,9 @@ import React, { useEffect, useState } from 'react';
 import { Button, Layout } from 'antd';
 
 // Hook for fetching and updating tasks list
-import useTasks from './api/useTasks'; // uncomment this line if you're using the real BE API
+// import useTasks from './api/useTasks'; // uncomment this line if you're using the real BE API
 // uncomment the line below if you want to use mocked data (doesn't require a BE API)
-// import useTasks from './mocked/useTasks';
+import useTasks from './mocked/useTasks';
 
 // Task type definition (title, id, status, etc.)
 import { CustomTask, CustomBaseTask } from './types';
@@ -24,95 +24,72 @@ import { useConfirmationDialog } from '../../contexts/ConfirmationDialogContext'
 
 // Main component that manages the task list
 const TaskManager = () => {
-  // Getting the task list and methods for adding/updating/deleting tasks
   const { tasks, addTask, updateTask, deleteTask } = useTasks();
 
-  // ID of the task being edited (undefined means we're creating a new one)
   const [taskInEditId, setTaskInEditId] = useState<string | undefined>();
 
-  // Whether the Add/Edit dialog is open
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Getting the open/close functions for the confirmation dialog
   const { openConfirmation, closeConfirmation } = useConfirmationDialog();
 
-  // When the task list changes — reset the form (close the modal)
-  useEffect(() => {
-    if (tasks.length === 0) return;
-
-    resetForm();
-  }, [tasks]);
-
-  // Start editing a task (open the dialog)
-  const startEditing = (taskId: string) => {
+  const onEditStart = (taskId: string) => {
     setTaskInEditId(taskId);
     setIsDialogOpen(true);
   };
 
-  // Reset the form — close the dialog and clear taskInEditId
-  const resetForm = () => {
+  const onEditStop = () => {
     setTaskInEditId(undefined);
     setIsDialogOpen(false);
   };
 
-
-
-  const onSave = (updatedTask: CustomTask | CustomBaseTask) => {
-    // Do nothing if the title is empty
+  const onSave = (updatedTask: CustomTask) => {
     if (!updatedTask?.title.trim()) return;
 
- 
-    if ('id' in updatedTask && 'status' in updatedTask) {
-      updateTask(updatedTask as CustomTask).then(resetForm);
-    }
-    else { 
-      addTask(updatedTask).then(resetForm);
+    try {
+      if (updatedTask?.id) {
+        updateTask(updatedTask);
+      } else {
+        addTask(updatedTask);
+      }
+    } finally {
+      onEditStop();
     }
   };
 
-
-
-  // Handle delete button click
   const onDelete = (taskId: string) => {
     const delTitle = tasks?.find((task) => task.id === taskId)?.title;
 
-    // Open confirmation dialog before deleting
     openConfirmation({
       title: 'Delete Task',
       confirmLabel: 'Delete',
       text: `Are you sure you want to delete ${delTitle} task?`,
-      onConfirm: () => handleDeleteTask(taskId), // Delete after confirmation
-      onCancel: closeConfirmation, // If canceled — just close the dialog
+      onConfirm: () => handleDeleteTask(taskId),
+      onCancel: closeConfirmation,
     });
   };
 
-  // Delete task and close confirmation
   const handleDeleteTask = (taskId: string) => {
     deleteTask(taskId);
     closeConfirmation();
   };
 
-  // The task currently being edited (passed to the dialog)
   const taskInEdit = tasks?.find((task) => task.id === taskInEditId);
 
-  // Render the UI
   return (
     <StyledLayout>
       <StyledContent>
-        {/* Task list with edit and delete options */}
-        <TasksList tasks={tasks} onEdit={startEditing} onDelete={onDelete} />
+        <TasksList tasks={tasks} onEdit={onEditStart} onDelete={onDelete} />
 
-        {/* "Add Task" button */}
         <StyledButton type="primary" onClick={() => setIsDialogOpen(true)}>
           Add Task
         </StyledButton>
 
-        {/* Modal dialog for adding or editing a task */}
         <AddOrEditDialog
+          key={taskInEdit?.id} // when pass key, the dialog will be treated as a new one, so no need to reset fields inside dialog
           open={isDialogOpen}
           task={taskInEdit}
           onSave={onSave}
-          onCancel={resetForm}
+          onCancel={onEditStop}
         />
       </StyledContent>
     </StyledLayout>
