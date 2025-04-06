@@ -67,8 +67,8 @@ const updateTask = (updatedTask: CustomTask) => {
       })
       .catch((error) => {
         notification.error({
-          message: 'Error saving task',
-          description: `Saving task failed with error: ${error.message}`,
+          message: 'Error deleting task',
+          description: `Deleting task failed with error: ${error.message}`,
           duration: 3, // Auto-dismiss in 3 seconds
         });
       });
