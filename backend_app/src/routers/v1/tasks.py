@@ -102,3 +102,13 @@ def delete_task(task_id: UUID):
             task_deleted = True
             continue
     return task_deleted
+
+
+# Add a GET endpoint for available statuses
+@router.get("/tasks/statuses")
+def get_task_statuses():
+    """
+    Endpoint to get all available task statuses.
+        curl -X GET http://localhost:8000/v1/tasks/statuses
+    """
+    return ["pending", "in_progress", "completed", "archived"]
