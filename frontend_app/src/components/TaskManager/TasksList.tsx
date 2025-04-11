@@ -1,15 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import { List, Button } from 'antd';
-import { CustomTask } from './useTasks';
+import { CustomTask } from './types';
 import { Typography } from 'antd';
 
 const { Text, Title } = Typography;
 
 type Props = {
   tasks?: CustomTask[];
-  onEdit: (task: CustomTask) => void;
-  onDelete: (task_id: number) => void;
+  onEdit: (taskId: string) => void;
+  onDelete: (task_id: string) => void;
 };
 
 const TasksList = ({
@@ -29,7 +29,7 @@ const TasksList = ({
         return (
           <StyledListItem
             actions={[
-              <Button type="link" onClick={() => onEdit(typedTask)}>
+              <Button type="link" onClick={() => onEdit(typedTask.id)}>
                 Edit
               </Button>,
               <Button type="link" onClick={() => onDelete(typedTask.id)}>
