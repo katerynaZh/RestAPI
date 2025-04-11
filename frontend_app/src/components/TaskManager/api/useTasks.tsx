@@ -6,7 +6,7 @@ import { CustomTask, CustomBaseTask } from '../types';
 
 const useTasks = () => {
   const [tasks, setTasks] = useState<CustomTask[]>([] as CustomTask[]);
-
+  const [statuses, setStatuses] = useState<string[]>([]);
   // Fetch tasks from backend
   useEffect(() => {
     axios
@@ -24,6 +24,14 @@ const useTasks = () => {
       });
   }, []);
 
+  const getTaskStatuses = () => {
+    
+    useEffect(() => {
+      axios.get('/v1/task/statuses').then((res) => {
+        setStatuses(res.data); // assumes it's an array like ["Open", "In Progress", "Done"]
+      });
+    }, []);
+  }
   // Handle adding or updating a task
  const addTask = (newTask: CustomBaseTask) => {
   return axios
@@ -73,7 +81,7 @@ const updateTask = (updatedTask: CustomTask) => {
         });
       });
   };
-  return { tasks, addTask, updateTask, deleteTask };
+  return { tasks, statuses, addTask, updateTask, deleteTask, getTaskStatuses };
 };
 
 export default useTasks;

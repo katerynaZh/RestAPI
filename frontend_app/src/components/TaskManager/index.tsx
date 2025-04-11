@@ -24,7 +24,7 @@ import { useConfirmationDialog } from '../../contexts/ConfirmationDialogContext'
 
 // Main component that manages the task list
 const TaskManager = () => {
-  const { tasks, addTask, updateTask, deleteTask } = useTasks();
+  const { tasks, statuses, addTask, updateTask, deleteTask, getTaskStatuses } = useTasks();
 
   const [taskInEditId, setTaskInEditId] = useState<string | undefined>();
 

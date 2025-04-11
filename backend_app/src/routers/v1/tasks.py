@@ -3,6 +3,7 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Header
 from src.models import Task, BaseTask
 from src.formating import JsonChildren, JsonTree
+from src.statutes import STATUSES
 
 # In case if needed we could deal with multi version env and migrate to the new API
 router = APIRouter(prefix="/v1")
@@ -111,4 +112,4 @@ def get_task_statuses():
     Endpoint to get all available task statuses.
         curl -X GET http://localhost:8000/v1/tasks/statuses
     """
-    return ["pending", "in_progress", "completed", "archived"]
+    return STATUSES

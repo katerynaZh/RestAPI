@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
-import { Input, Form } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Input, Form, Select } from 'antd'; // add Select
 import { CustomTask } from './types';
 import Dialog from '../common/Dialog';
 
+
 const { Item } = Form;
 const { TextArea } = Input;
+const { Option } = Select;
 
 type Props = {
   open: boolean;
@@ -12,10 +14,8 @@ type Props = {
   onSave: (task: CustomTask) => void;
   onCancel: () => void;
 };
-
 const AddOrEditDialog = ({ open, task, onSave, onCancel }: Props) => {
   const [form] = Form.useForm();
-
   const { setFieldsValue, validateFields } = form;
 
   useEffect(() => {
@@ -30,6 +30,7 @@ const AddOrEditDialog = ({ open, task, onSave, onCancel }: Props) => {
     });
   };
 
+  
   return (
     <Dialog
       open={open}
@@ -48,6 +49,19 @@ const AddOrEditDialog = ({ open, task, onSave, onCancel }: Props) => {
         </Item>
         <Item name="description" label="Description">
           <TextArea rows={3} placeholder="Enter task description" />
+        </Item>
+        <Item
+          name="status"
+          label="Status"
+          rules={[{ required: true, message: 'Please select a status' }]}
+        >
+          <Select placeholder="Select task status">
+            {statuses.map((status) => (
+              <Option key={status} value={status}>
+                {status}
+              </Option>
+            ))}
+          </Select>
         </Item>
       </Form>
     </Dialog>
