@@ -24,7 +24,7 @@ import { useConfirmationDialog } from '../../contexts/ConfirmationDialogContext'
 
 // Main component that manages the task list
 const TaskManager = () => {
-  const { tasks, statuses, addTask, updateTask, deleteTask, getTaskStatuses } = useTasks();
+  const { tasks, statuses, addTask, updateTask, deleteTask} = useTasks();
 
   const [taskInEditId, setTaskInEditId] = useState<string | undefined>();
 
@@ -88,8 +88,10 @@ const TaskManager = () => {
           key={taskInEdit?.id} // when pass key, the dialog will be treated as a new one, so no need to reset fields inside dialog
           open={isDialogOpen}
           task={taskInEdit}
+          statuses={statuses}
           onSave={onSave}
           onCancel={onEditStop}
+          
         />
       </StyledContent>
     </StyledLayout>

@@ -11,10 +11,13 @@ const { Option } = Select;
 type Props = {
   open: boolean;
   task?: CustomTask;
+  statuses?: string[];
   onSave: (task: CustomTask) => void;
   onCancel: () => void;
+
 };
-const AddOrEditDialog = ({ open, task, onSave, onCancel }: Props) => {
+
+const AddOrEditDialog = ({ open, task, statuses, onSave, onCancel}: Props) => {
   const [form] = Form.useForm();
   const { setFieldsValue, validateFields } = form;
 
@@ -50,19 +53,21 @@ const AddOrEditDialog = ({ open, task, onSave, onCancel }: Props) => {
         <Item name="description" label="Description">
           <TextArea rows={3} placeholder="Enter task description" />
         </Item>
+        {task && (
         <Item
           name="status"
           label="Status"
           rules={[{ required: true, message: 'Please select a status' }]}
         >
           <Select placeholder="Select task status">
-            {statuses.map((status) => (
+            {statuses?.map((status) => (
               <Option key={status} value={status}>
                 {status}
               </Option>
             ))}
           </Select>
         </Item>
+        )}
       </Form>
     </Dialog>
   );

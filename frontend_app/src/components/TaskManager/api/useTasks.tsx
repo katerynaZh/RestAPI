@@ -24,14 +24,17 @@ const useTasks = () => {
       });
   }, []);
 
-  const getTaskStatuses = () => {
-    
+    // Fetch task statuses from backend
     useEffect(() => {
-      axios.get('/v1/task/statuses').then((res) => {
-        setStatuses(res.data); // assumes it's an array like ["Open", "In Progress", "Done"]
-      });
+      axios.get('http://localhost:8000/v1/tasks/statuses')
+        .then((res) => {
+          setStatuses(res.data); // Make sure res.data is the array of statuses
+        })
+        .catch((error) => {
+          console.error('Failed to load statuses:', error);
+        });
     }, []);
-  }
+  
   // Handle adding or updating a task
  const addTask = (newTask: CustomBaseTask) => {
   return axios
@@ -81,7 +84,7 @@ const updateTask = (updatedTask: CustomTask) => {
         });
       });
   };
-  return { tasks, statuses, addTask, updateTask, deleteTask, getTaskStatuses };
+  return { tasks, statuses, addTask, updateTask, deleteTask };
 };
 
 export default useTasks;
