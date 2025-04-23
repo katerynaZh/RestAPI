@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 // Importing UI components from Ant Design library
-import { Button, Layout } from 'antd';
+import { Button, Layout, notification } from 'antd';
 
 // Hook for fetching and updating tasks list
 import useTasks from './api/useTasks'; // uncomment this line if you're using the real BE API
@@ -56,6 +56,12 @@ const TaskManager = () => {
     }
   };
 
+  // Check if an identical task already exists
+  const taskInEdit = tasks?.find((task) => task.id === taskInEditId);
+  
+  // Handle duplicate task case
+  
+  
   const onDelete = (taskId: string) => {
     const delTitle = tasks?.find((task) => task.id === taskId)?.title;
 
@@ -68,17 +74,38 @@ const TaskManager = () => {
     });
   };
 
+  const handleSaveTask = (newTask: CustomTask) => {
+    const isDuplicate = tasks.some((task) =>
+      task.title === newTask.title &&
+      task.description === newTask.description &&
+      task.status === newTask.status
+    );
+
+    if (!newTask.id && isDuplicate) {
+      notification.warning({
+        message: 'Duplicate task',
+        description: 'This task already exists and was not added.',
+        duration: 3,
+      });
+      return;
+    }
+
+    if (newTask.id) {
+      updateTask(newTask); // Edit existing task
+    } else {
+      addTask(newTask); // Add new task
+    }
+  };
+
   const handleDeleteTask = (taskId: string) => {
     deleteTask(taskId);
     closeConfirmation();
   };
 
-  const taskInEdit = tasks?.find((task) => task.id === taskInEditId);
-
   return (
     <StyledLayout>
       <StyledContent>
-        <TasksList tasks={tasks} onEdit={onEditStart} onDelete={onDelete} />
+        <TasksList tasks={tasks}   onEdit={onEditStart} onDelete={onDelete}  />
 
         <StyledButton type="primary" onClick={() => setIsDialogOpen(true)}>
           Add Task
