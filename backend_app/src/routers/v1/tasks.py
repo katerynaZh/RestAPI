@@ -1,6 +1,6 @@
 from uuid import uuid4, UUID
 from typing import Optional
-from fastapi import APIRouter, HTTPException, Header
+from fastapi import APIRouter, HTTPException, Header, status
 from src.models import Task, BaseTask
 from src.formating import JsonChildren, JsonTree
 
@@ -37,7 +37,7 @@ def get_tasks(content_type: Optional[str] = Header("application/json")):
         return json_tree.transform(tasks_db)
     else:
         raise HTTPException(
-            status_code=400,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Unknown output format '{content_type}'. Select one from the list: {', '.join(allowed_formats)}"
         )
 
@@ -58,7 +58,7 @@ def update_task(task: Task):
 
     # If task does not exist - raise an error
     raise HTTPException(
-        status_code=404,
+        status_code=status.HTTP_404_NOT_FOUND,
         detail=f"Task with id '{task.id}' not found"
     )
 
@@ -76,7 +76,7 @@ def create_task(task: BaseTask):
         parent_task = next((t for t in tasks_db if t.id == task.parent), None)
         if not parent_task:
             raise HTTPException(
-                status_code=404,
+                status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Parent task with id '{task.parent}' not found"
             )
     new_task = Task(
