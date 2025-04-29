@@ -1,11 +1,10 @@
-
-import { test, expect, vi } from "vitest"; // ✅ Import only what we need
+// Mock window.matchMediaimport { test, expect, vi } from "vitest"; // ✅ Import only what we need
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 // import "@testing-library/jest-dom"; // ✅ Ensures matchers are loaded
 import App from "../App";
 import TaskManager from "../components/TaskManager";
+import { test, expect, vi } from "vitest";
 
-// Mock window.matchMedia
 window.matchMedia = window.matchMedia || function() {
   return {
     matches: false,
@@ -14,22 +13,99 @@ window.matchMedia = window.matchMedia || function() {
   };
 };
 
-// ✅ Mock axios properly
+// Mock axios
 vi.mock("axios", () => ({
   default: {
-    get: vi.fn(() => Promise.resolve({ data: [] })), // ✅ Mock an empty task list
+    get: vi.fn(() => Promise.resolve({ data: [] })),
     post: vi.fn(() =>
       Promise.resolve({
-        data: { id: 1, title: "New Task", description: "Task Description", status: "pending" },
+        data: { title: "New Task", description: "Task Description"},
       })
     ),
+    patch: vi.fn(() =>
+      Promise.resolve({ 
+        data: {id: "21797e7e-f23f-42ce-ae58-ae3344585dff", status: "completed", title: "New Task", description: "Task Description", parent: null},
+      })),
+    delete: vi.fn(() => Promise.resolve({})),
   },
 }));
 
 test("renders task list", async () => {
   render(<App />);
-  expect(screen.getByTestId("tasks-list")).toBeTruthy(); // ✅ Ensures the component renders
+  expect(screen.getByTestId("tasks-list")).toBeTruthy();
 });
+
+test("displays empty state when no tasks are available", async () => {
+  render(<App />);
+  await waitFor(() => {
+    expect(screen.getByText("No tasks available")).toBeTruthy();
+  });
+});
+
+test("can add a new task", async () => {
+  render(<TaskManager />);
+  fireEvent.change(screen.getByTestId("input-title"), {
+    target: { value: "New Task" },
+  });
+  fireEvent.change(screen.getByTestId("input-description"), {
+    target: { value: "Task Description" },
+  });
+  fireEvent.click(screen.getByTestId("add-task-btn"));
+
+  await waitFor(() => {
+    const taskList = screen.getByRole("list");
+    expect(taskList.innerHTML).toContain("New Task");
+  });
+});
+
+test("can delete a task", async () => {
+  render(<TaskManager />);
+  fireEvent.click(screen.getByTestId("delete-task-btn-1")); // Assuming task with id 1 exists
+
+  await waitFor(() => {
+    expect(screen.queryByText("New Task")).toBeNull();
+  });
+});
+
+test("can mark a task as completed", async () => {
+  render(<TaskManager />);
+  fireEvent.click(screen.getByTestId("complete-task-btn-1")); // Assuming task with id 1 exists
+
+  await waitFor(() => {
+    expect(screen.getByTestId("task-status-1").textContent).toBe("completed");
+  });
+});
+
+
+// Mock window.matchMedia
+// window.matchMedia = window.matchMedia || function() {
+//   return {
+//     matches: false,
+//     addListener: function() {},
+//     removeListener: function() {}
+//   };
+// };
+
+// ✅ Mock axios properly
+// vi.mock("axios", () => ({
+//   default: {
+//     get: vi.fn(() => Promise.resolve({ data: [] })), // ✅ Mock an empty task list
+//     post: vi.fn(() =>
+//       Promise.resolve({
+//         data: { id: 1, title: "New Task", description: "Task Description", status: "pending" },
+//       })
+//     ),
+//   },
+// }));
+
+
+
+// test("renders task list", async () => {
+//   render(<App />);
+//   expect(screen.getByTestId("tasks-list")).toBeTruthy(); // ✅ Ensures the component renders
+// });
+
+
 
 test.skip("can add a new task", async () => {
   render(<TaskManager />);
