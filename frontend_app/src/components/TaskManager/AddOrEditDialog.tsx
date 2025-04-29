@@ -53,7 +53,7 @@ const AddOrEditDialog = ({ open, task, statuses, onSave, onCancel}: Props) => {
         <Item name="description" label="Description">
           <TextArea rows={3} placeholder="Enter task description" />
         </Item>
-        {task && (
+        {task && ( // Only show status field if task is provided (for editing)
         <Item
           name="status"
           label="Status"
