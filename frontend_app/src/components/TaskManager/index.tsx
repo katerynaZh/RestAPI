@@ -44,14 +44,14 @@ const TaskManager = () => {
 
   const onSave = (updatedTask: CustomTask) => {
     if (!updatedTask?.title.trim()) return;
-
+    
     try {
-      if (updatedTask?.id) {
-        updateTask(updatedTask);
-      } else {
-        addTask(updatedTask);
-      }
-    } finally {
+      handleSaveTask(updatedTask); // Add new task
+    }
+    catch (error) {
+      console.error('Error saving task:', error);
+    }
+    finally {
       onEditStop();
     }
   };
@@ -75,17 +75,17 @@ const TaskManager = () => {
   };
 
   const handleSaveTask = (newTask: CustomTask) => {
+    const normalize = (str?: string) => (str ?? '').trim().toLowerCase();
     const isDuplicate = tasks.some((task) =>
-      task.title === newTask.title &&
-      task.description === newTask.description &&
-      task.status === newTask.status
+      normalize(task.title) === normalize(newTask.title) &&
+      normalize(task.description) === normalize(newTask.description) &&
+      (task.status === newTask.status || newTask.status === undefined)
     );
-
-    if (!newTask.id && isDuplicate) {
+    if (isDuplicate) {
       notification.warning({
         message: 'Duplicate task',
         description: 'This task already exists and was not added.',
-        duration: 3,
+        duration: 5,
       });
       return;
     }
