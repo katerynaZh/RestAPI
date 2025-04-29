@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 // Importing UI components from Ant Design library
-import { Button, Layout } from 'antd';
+import { Button, Layout, notification } from 'antd';
 
 // Hook for fetching and updating tasks list
 import useTasks from './api/useTasks'; // uncomment this line if you're using the real BE API
@@ -24,7 +24,7 @@ import { useConfirmationDialog } from '../../contexts/ConfirmationDialogContext'
 
 // Main component that manages the task list
 const TaskManager = () => {
-  const { tasks, addTask, updateTask, deleteTask } = useTasks();
+  const { tasks, statuses, addTask, updateTask, deleteTask} = useTasks();
 
   const [taskInEditId, setTaskInEditId] = useState<string | undefined>();
 
@@ -44,18 +44,24 @@ const TaskManager = () => {
 
   const onSave = (updatedTask: CustomTask) => {
     if (!updatedTask?.title.trim()) return;
-
+    
     try {
-      if (updatedTask?.id) {
-        updateTask(updatedTask);
-      } else {
-        addTask(updatedTask);
-      }
-    } finally {
+      handleSaveTask(updatedTask); // Add new task
+    }
+    catch (error) {
+      console.error('Error saving task:', error);
+    }
+    finally {
       onEditStop();
     }
   };
 
+  // Check if an identical task already exists
+  const taskInEdit = tasks?.find((task) => task.id === taskInEditId);
+  
+  // Handle duplicate task case
+  
+  
   const onDelete = (taskId: string) => {
     const delTitle = tasks?.find((task) => task.id === taskId)?.title;
 
@@ -68,17 +74,38 @@ const TaskManager = () => {
     });
   };
 
+  const handleSaveTask = (newTask: CustomTask) => {
+    const normalize = (str?: string) => (str ?? '').trim().toLowerCase();
+    const isDuplicate = tasks.some((task) =>
+      normalize(task.title) === normalize(newTask.title) &&
+      normalize(task.description) === normalize(newTask.description) &&
+      (task.status === newTask.status || newTask.status === undefined)
+    );
+    if (isDuplicate) {
+      notification.warning({
+        message: 'Duplicate task',
+        description: 'This task already exists and was not added.',
+        duration: 5,
+      });
+      return;
+    }
+
+    if (newTask.id) {
+      updateTask(newTask); // Edit existing task
+    } else {
+      addTask(newTask); // Add new task
+    }
+  };
+
   const handleDeleteTask = (taskId: string) => {
     deleteTask(taskId);
     closeConfirmation();
   };
 
-  const taskInEdit = tasks?.find((task) => task.id === taskInEditId);
-
   return (
     <StyledLayout>
       <StyledContent>
-        <TasksList tasks={tasks} onEdit={onEditStart} onDelete={onDelete} />
+        <TasksList tasks={tasks}   onEdit={onEditStart} onDelete={onDelete}  />
 
         <StyledButton type="primary" onClick={() => setIsDialogOpen(true)}>
           Add Task
@@ -88,8 +115,10 @@ const TaskManager = () => {
           key={taskInEdit?.id} // when pass key, the dialog will be treated as a new one, so no need to reset fields inside dialog
           open={isDialogOpen}
           task={taskInEdit}
+          statuses={statuses}
           onSave={onSave}
           onCancel={onEditStop}
+          
         />
       </StyledContent>
     </StyledLayout>
