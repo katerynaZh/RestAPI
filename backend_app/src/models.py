@@ -1,6 +1,7 @@
 from uuid import UUID
 from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
+from src.statutes import STATUSES
 
 
 # ✅ Pydantic Schema ()
@@ -14,4 +15,4 @@ class BaseTask(BaseModel):
 # ✅ Pydantic Schema (for API validation)
 class Task(BaseTask):
     id: UUID
-    status: str = Field("pending", pattern="^(pending|in-progress|completed)$")
+    status: str = Field("pending", pattern="^("+"|".join(STATUSES)+")$")

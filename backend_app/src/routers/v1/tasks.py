@@ -3,6 +3,7 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Header, status
 from src.models import Task, BaseTask
 from src.formating import JsonChildren, JsonTree
+from src.statutes import STATUSES
 
 # In case if needed we could deal with multi version env and migrate to the new API
 router = APIRouter(prefix="/v1")
@@ -102,3 +103,13 @@ def delete_task(task_id: UUID):
             task_deleted = True
             continue
     return task_deleted
+
+
+# Add a GET endpoint for available statuses
+@router.get("/tasks/statuses")
+def get_task_statuses():
+    """
+    Endpoint to get all available task statuses.
+        curl -X GET http://localhost:8000/v1/tasks/statuses
+    """
+    return STATUSES

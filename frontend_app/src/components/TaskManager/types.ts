@@ -1,4 +1,5 @@
 export interface CustomBaseTask {
+  status: string;
   title: string;
   description: string;
   parent: string;
