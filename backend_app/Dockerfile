@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy the requirements.txt file from the host to the container
 COPY requirements.txt .
 
+# Install system dependencies required for psycopg2
+RUN apt-get update && apt-get install -y libpq-dev
+
 # Install the Python dependencies specified in requirements.txt
 RUN pip install -r requirements.txt
 

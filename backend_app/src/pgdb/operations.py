@@ -35,10 +35,11 @@ class PostgresDB:
 
         self._dbhost = db_host
         self._dbport = db_port
+        self._dbname = db_name
         self._dbuser = db_user
         self._dbpassword = db_password
-        self._dbname = db_name
-        self._dbconstr = f"postgresql://{self._dbuser}:{self._dbpassword}@{self._dbhost}:{self._dbport}/{self._dbname}"
+
+        self._dbconstr = f"host={self._dbhost} port={self._dbport} dbname={self._dbname} user={self._dbuser} password={self._dbpassword}"
         self._conn_pool = None
 
     @property
@@ -85,14 +86,14 @@ class PostgresDB:
                         title VARCHAR(100) NOT NULL,
                         description VARCHAR(300),
                         status VARCHAR(50) NOT NULL DEFAULT 'pending',
-                        parent UUID,
-                    )
+                        parent UUID
+                    );
                     """
                 )
 
 db = PostgresDB(
     db_host=getenv("POSTGRES_HOST", "localhost"),
-    db_port=getenv("POSTGRES_PORT", 5432),
+    db_port=getenv("POSTGRES_PORT", "5432"),
     db_name=getenv("POSTGRES_DB", "tasks_db"),
     db_user=getenv("POSTGRES_USER", "pguser"),
     db_password=getenv("POSTGRES_PASSWORD", "password"),
@@ -165,16 +166,19 @@ async def get_all_tasks() -> list[Task]:
                 """
             )
             result = await cursor.fetchall()
-            return [
-                Task(
-                    id=row[0],
-                    title=row[1],
-                    description=row[2],
-                    status=row[3],
-                    parent=row[4],
-                )
-                for row in result
-            ]
+            if not result:
+                return []
+            else:
+                return [
+                    Task(
+                        id=row[0],
+                        title=row[1],
+                        description=row[2],
+                        status=row[3],
+                        parent=row[4],
+                    )
+                    for row in result
+                ]
 
 
 async def update_task(
@@ -185,6 +189,12 @@ async def update_task(
     """
     async with db.async_pool.connection() as conn:
         async with conn.cursor() as cursor:
+            # Check if task exists
+            existing_task = await get_task(task.id)
+            if not existing_task:
+                raise DatabaseError(f"Task with id '{task.id}' not found")
+
+            # Update task if it exists
             await cursor.execute(
                 f"""
                 UPDATE {db.tasks_tb_name}
