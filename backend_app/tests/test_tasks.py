@@ -103,10 +103,8 @@ def test_create_task_with_parent(mock_get_all, mock_create_task, mock_get_task):
 def test_create_task_with_invalid_parent(mock_get_task):
     """Create a task with a random UUID as a parent (should fail)."""
     mock_get_task.return_value = None
-    random_parent_id = str(uuid.uuid4())
-
     response = client.post("/v1/tasks", json={
         "title": "Invalid Parent Task",
-        "parent": random_parent_id
+        "parent": str(uuid.uuid4())
     })
     assert response.status_code == 404

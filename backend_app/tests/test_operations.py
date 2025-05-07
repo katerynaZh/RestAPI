@@ -11,9 +11,13 @@ from src.models import Task
 
 @pytest.fixture
 def mock_db():
-    db = PostgresDB()
-    db.async_pool = AsyncMock()
-    return db
+    with patch("src.pgdb.operations.db.connect", new_callable=AsyncMock), \
+         patch("src.pgdb.operations.db.close", new_callable=AsyncMock):
+        
+        mock_pool = AsyncMock()
+        db = PostgresDB()
+        object.__setattr__(db, "_async_pool", mock_pool)  # bypass property setter
+        yield db
 
 
 @pytest.fixture
