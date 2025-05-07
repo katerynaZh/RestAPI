@@ -4,7 +4,7 @@ It contains functions to create, read, update, and delete (CRUD) records in the 
 """
 
 
-# **Best Practices**: 
+# **Best Practices**:
 #    - Always ensure that a `commit()` is called after a successful transaction to persist changes.
 #    - Use `await conn.rollback()` in case of an error to undo any changes made during the transaction.
 #    - Wrap database operations in a `try-except` block to handle exceptions gracefully.
