@@ -3,22 +3,23 @@ This module contains unit tests for the operations performed on tasks in a Postg
 The tests use the `pytest` framework and mock the database interactions using `unittest.mock.AsyncMock`.
 '''
 import pytest
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, patch, MagicMock
 from uuid import uuid4
 from psycopg import DatabaseError
 from src.pgdb.operations import PostgresDB, create_task, get_task, get_all_tasks, update_task, delete_task
 from src.models import Task
 
+
 @pytest.fixture
 def mock_db():
-    with patch("src.pgdb.operations.db.connect", new_callable=AsyncMock), \
-         patch("src.pgdb.operations.db.close", new_callable=AsyncMock):
-        
-        mock_pool = AsyncMock()
-        db = PostgresDB()
-        object.__setattr__(db, "_async_pool", mock_pool)  # bypass property setter
-        yield db
+    db = PostgresDB()
+    mock_pool = MagicMock()
+    # Patch internal attribute directly (bypass property)
+    object.__setattr__(db, "_async_pool", mock_pool)
 
+    # Patch connect() to skip real init
+    with patch.object(db, "connect", new_callable=AsyncMock), patch.object(db, "close", new_callable=AsyncMock):
+        yield db
 
 @pytest.fixture
 def sample_task():
