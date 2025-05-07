@@ -73,7 +73,7 @@ async def create_task(task: BaseTask):
     """
     if task.parent:
         # Check if parent task exists
-        parent_task = crud.get_task(task.parent)
+        parent_task = await crud.get_task(task.parent)
         if not parent_task:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
