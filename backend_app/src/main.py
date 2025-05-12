@@ -1,8 +1,36 @@
-from fastapi import FastAPI
-from src.routers.v1 import tasks as v1_tasks
-from fastapi.middleware.cors import CORSMiddleware
+"""
+main.py
+This module initializes and configures the FastAPI application for the Tasks Management API.
+It includes:
+- Database connection management using an asynchronous context manager.
+- Middleware setup for handling Cross-Origin Resource Sharing (CORS).
+- Routing configuration for API endpoints.
+- A root endpoint for basic service information.
 
-app = FastAPI()
+Endpoints:
+- `/`: A root endpoint that returns a welcome message.
+"""
+
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from src.pgdb.operations import db
+from src.routers.v1 import tasks as v1_tasks
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    try:
+        await db.connect()
+        yield
+    finally:
+        await db.close()
+
+
+app = FastAPI(
+    lifespan=lifespan,
+    description="Tasks management API APP",
+    version="1.0.0",
+)
 
 app.add_middleware(
     CORSMiddleware,
