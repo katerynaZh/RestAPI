@@ -44,3 +44,14 @@ cd frontend_app
 docker build -t frontend_app .
 docker run -p 3000:5173  frontend_app
 ```
+
+## Running whole configuration from the Docker Compose
+### Pre-requisites
+```bash
+apt install make
+```
+
+### Starting all services
+```bash
+make up
+```

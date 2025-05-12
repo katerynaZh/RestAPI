@@ -14,10 +14,6 @@ jobs:
       - name: instal libraries
         run: |
           pip install -r backend_app/requirements.txt
-      - name: Running backend app
-        run: |
-          cd backend_app/
-          uvicorn src.main:app &
       - name: Running backend tests
         run: |
           pytest -v
