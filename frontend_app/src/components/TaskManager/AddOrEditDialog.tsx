@@ -25,6 +25,9 @@ const AddOrEditDialog = ({ open, task, statuses, onSave, onCancel}: Props) => {
     if (task) {
       setFieldsValue(task);
     }
+    return ()=>{
+      setFieldsValue({}); // Clear form fields when the dialog is closed
+    }
   }, [task]);
 
   const handleSave = () => {
