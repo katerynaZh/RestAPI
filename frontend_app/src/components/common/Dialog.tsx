@@ -27,7 +27,12 @@ const Dialog = ({
         <Button key="cancel" onClick={onCancel}>
           Cancel
         </Button>,
-        <Button key="save" type="primary" onClick={onSubmit}>
+        <Button
+          key="save"
+          data-testid="dialog-saveBtn"
+          type="primary"
+          onClick={onSubmit}
+        >
           {submitLabel}
         </Button>,
       ]}
