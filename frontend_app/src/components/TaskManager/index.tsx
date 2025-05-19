@@ -105,7 +105,9 @@ const TaskManager = () => {
   return (
     <StyledLayout>
       <StyledContent>
-        <TasksList tasks={tasks}   onEdit={onEditStart} onDelete={onDelete}  />
+        <h1 data-testid="taskmanager-title">Task Manager</h1>
+        
+        <TasksList tasks={tasks} onEdit={onEditStart} onDelete={onDelete}  />
 
         <StyledButton type="primary" data-testid="addTaskBtn" onClick={() => setIsDialogOpen(true)}>
           Add Task

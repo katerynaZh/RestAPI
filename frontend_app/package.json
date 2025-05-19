@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest --dir src/tests --environment=jsdom --run"
+    "test": "vitest run --environment=jsdom"
   },
   "dependencies": {
     "@types/styled-components": "^5.1.34",
