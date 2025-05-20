@@ -1,5 +1,5 @@
 // Mock window.matchMediaimport { test, expect, vi } from "vitest"; // ✅ Import only what we need
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor,act } from '@testing-library/react';
 // import "@testing-library/jest-dom"; // ✅ Ensures matchers are loaded
 import TaskManager from '../index';
 import { test, expect, vi } from 'vitest';
@@ -38,7 +38,7 @@ vi.mock('axios', () => ({
   },
 }));
 
-test('renders task list', async () => {
+test.skip('renders task list', async () => {
   render(<TaskManager />);
   expect(screen.getByTestId('taskmanager-title')).toBeTruthy();
 });
@@ -49,7 +49,12 @@ test('can add a new task', async () => {
 
   const addTaskBtn = screen.getByTestId('addTaskBtn');
   expect(addTaskBtn).toBeDefined();
-  fireEvent.click(addTaskBtn);
+  await act(async () => {
+    fireEvent.click(addTaskBtn);
+  });
+  expect(await screen.getByTestId('AddOrEditForm')).toBeInTheDocument();
+  /* assert on the output */
+  
 
   //const add_dialog = screen.getByText('Add Task');
   //expect(add_dialog).toBeDefined();

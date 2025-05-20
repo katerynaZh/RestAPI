@@ -1,5 +1,5 @@
 // Mock window.matchMediaimport { test, expect, vi } from "vitest"; // ✅ Import only what we need
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import App from '../App';
 import { test, expect, vi } from 'vitest';
 
@@ -38,6 +38,8 @@ vi.mock('axios', () => ({
 }));
 
 test('renders app', async () => {
-  render(<App />);
-  expect(screen.getByTestId('tasks-list')).toBeTruthy(); // TODO
+  await act(async () => {
+    render(<App />);
+    });
+  expect(await screen.getByTestId('tasks-list')).toBeTruthy(); // TODO
 });

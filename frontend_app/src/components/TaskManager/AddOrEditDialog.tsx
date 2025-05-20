@@ -45,7 +45,7 @@ const AddOrEditDialog = ({ open, task, statuses, onSave, onCancel}: Props) => {
       onSubmit={handleSave}
       onCancel={onCancel}
     >
-      <Form form={form} layout="vertical">
+      <Form form={form} data-testid="AddOrEditForm" layout="vertical">
         <Item
           name="title"
           label="Title"
