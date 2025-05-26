@@ -52,10 +52,10 @@ const AddOrEditDialog = ({ open, task, statuses, onSave, onCancel}: Props) => {
           label="Title"
           rules={[{ required: true, message: 'Title is required' }]}
         >
-          <Input placeholder="Enter task title" />
+          <Input data-testid="input-title" placeholder="Enter task title" />
         </Item>
         <Item name="description" label="Description">
-          <TextArea rows={3} placeholder="Enter task description" />
+          <TextArea rows={3} data-testid="input-description" placeholder="Enter task description" />
         </Item>
         {task && ( // Only show status field if task is provided (for editing)
         <Item

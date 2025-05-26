@@ -20,7 +20,7 @@ vi.mock('axios', () => ({
     get: vi.fn(() => Promise.resolve({ data: [] })),
     post: vi.fn(() =>
       Promise.resolve({
-        data: { title: 'New Task', description: 'Task Description' },
+        data: { title: 'New Task Title', description: 'Test Task Description' },
       })
     ),
     patch: vi.fn(() =>
@@ -38,10 +38,10 @@ vi.mock('axios', () => ({
   },
 }));
 
-test.skip('renders task list', async () => {
-  render(<TaskManager />);
-  expect(screen.getByTestId('taskmanager-title')).toBeTruthy();
-});
+// test.skip('renders task list', async () => {
+//   render(<TaskManager />);
+//   expect(screen.getByTestId('taskmanager-title')).toBeTruthy();
+// });
 
 test('can add a new task', async () => {
   render(<TaskManager />);
@@ -55,22 +55,36 @@ test('can add a new task', async () => {
   expect(await screen.getByTestId('AddOrEditForm')).toBeInTheDocument();
   /* assert on the output */
   
+  const inputTitle = screen.getByTestId('input-title');
+  expect(inputTitle).toBeDefined();
 
-  //const add_dialog = screen.getByText('Add Task');
-  //expect(add_dialog).toBeDefined();
+  const inputDescription = screen.getByTestId('input-description');
+  expect(inputDescription).toBeDefined();
 
-  // fireEvent.click(screen.getByTestId("addTaskBtn"));
-  // fireEvent.change(screen.getByTestId("input-title"), {
-  //   target: { value: "New Task" },
-  // });
-  // fireEvent.change(screen.getByTestId("input-description"), {
-  //   target: { value: "Task Description" },
-  // });
+  const SaveButton = screen.getByTestId('dialog-saveBtn');
+  // SaveButton.textContent = 'Save';
+  expect(SaveButton).toBeDefined();
+  expect(SaveButton.textContent).toBe('Add');
 
-  // await waitFor(() => {
-  //   const taskList = screen.getByRole("list");
-  //   expect(taskList.innerHTML).toContain("New Task");
-  // });
+
+  const CancelButton = screen.getByTestId('dialog-cancelBtn');
+  expect(CancelButton).toBeDefined();
+
+
+  fireEvent.change(inputTitle, {
+    target: { value: "New Task Title" },
+  });
+  fireEvent.change(inputDescription, {
+    target: { value: "Test Task Description" },
+  });
+  fireEvent.click(SaveButton);
+  // ✅ Debugging: Print the updated DOM
+  await waitFor(() => { 
+    // console.log(screen.debug());
+    const taskList = screen.getByTestId("tasks-list"); // Get the <ul> element 
+    expect(taskList.innerHTML).toContain("New Task Title"); // ✅ Ensures "New Task Title" appears in the list
+    expect(taskList.innerHTML).toContain("Test Task Description"); // ✅ Ensures "Test Task Description" appears in the list
+  });
 });
 
 test.skip('can delete a task', async () => {
@@ -117,35 +131,11 @@ test.skip('can mark a task as completed', async () => {
 //   expect(screen.getByTestId("tasks-list")).toBeTruthy(); // ✅ Ensures the component renders
 // });
 
-test.skip('can add a new task', async () => {
-  render(<TaskManager />);
-  // fireEvent.click(screen.getByTestId("editing-task-btn")[0]);
 
-  expect(screen.getByTestId('input-title')).toBeTruthy();
-  // fireEvent.change(screen.getByTestId("input-title"), {
-  //   target: { value: "New Task" },
-  // });
-  // fireEvent.change(screen.getByTestId("input-description"), {
-  //   target: { value: "Task Description" },
-  // });
 
-  // fireEvent.click(screen.getByTestId("update-task-btn")); // Clicks the first button
-
-  // // ✅ Debugging: Print the updated DOM
-  // await waitFor(() => {
-  //   console.log(screen.debug()); // 🔍 Print the full component tree to see if "New Task" exists
-  // });
-
-  // // ✅ Check if the task list updates
-  // await waitFor(() => {
-  //   const taskList = screen.getByRole("list"); // Get the <ul> element
-  //   expect(taskList.innerHTML).toContain("New Task"); // ✅ Ensures "New Task" appears in the list
-  // });
+test.skip("displays empty state when no tasks are available", async () => {
+  render(<App />);
+  waitFor(() => {
+    expect(screen.getByText("ababagalamaga")).toBeTruthy();
+  });
 });
-
-// test("displays empty state when no tasks are available", async () => {
-//   render(<App />);
-//   waitFor(() => {
-//     expect(screen.getByText("ababagalamaga")).toBeTruthy();
-//   });
-// });

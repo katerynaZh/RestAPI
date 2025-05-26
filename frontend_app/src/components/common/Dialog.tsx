@@ -24,7 +24,7 @@ const Dialog = ({
       open={open}
       onCancel={onCancel}
       footer={[
-        <Button key="cancel" onClick={onCancel}>
+        <Button data-testid="dialog-cancelBtn" key="cancel" onClick={onCancel}>
           Cancel
         </Button>,
         <Button
