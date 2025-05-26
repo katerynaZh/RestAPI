@@ -22,13 +22,14 @@ const AddOrEditDialog = ({ open, task, statuses, onSave, onCancel}: Props) => {
   const { setFieldsValue, validateFields } = form;
 
   useEffect(() => {
-    if (task) {
-      setFieldsValue(task);
+    if (open) {
+      if (task) {
+        form.setFieldsValue(task);
+      } else {
+        form.resetFields();
+      }
     }
-    return ()=>{
-      setFieldsValue({}); // Clear form fields when the dialog is closed
-    }
-  }, [task]);
+  }, [open, task, form]);
 
   const handleSave = () => {
     validateFields().then((values) => {

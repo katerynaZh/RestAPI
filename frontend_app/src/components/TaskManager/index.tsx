@@ -120,7 +120,6 @@ const TaskManager = () => {
           statuses={statuses}
           onSave={onSave}
           onCancel={onEditStop}
-          
         />
       </StyledContent>
     </StyledLayout>
