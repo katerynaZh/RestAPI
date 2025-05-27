@@ -1,5 +1,5 @@
 // Mock window.matchMediaimport { test, expect, vi } from "vitest"; // ✅ Import only what we need
-import { render, screen, fireEvent, waitFor,act } from '@testing-library/react';
+import { render, screen, fireEvent, within, waitFor,act } from '@testing-library/react';
 // import "@testing-library/jest-dom"; // ✅ Ensures matchers are loaded
 import TaskManager from '../index';
 import { test, expect, vi } from 'vitest';
@@ -17,10 +17,24 @@ window.matchMedia =
 // Mock axios
 vi.mock('axios', () => ({
   default: {
-    get: vi.fn(() => Promise.resolve({ data: [] })),
+    get: vi.fn(() => Promise.resolve({ data: [
+      {
+        id: '21797e7e-f23f-42ce-ae58-ae3344585dff',
+        title: 'Some Existing Task',
+        description: 'This is a test task',
+        status: 'pending',
+        parent: null,
+      }
+    ] })),
     post: vi.fn(() =>
       Promise.resolve({
-        data: { title: 'New Task Title', description: 'Test Task Description' },
+        data: { 
+          id: '21797e7e-f23f-42ce-ae58-ae3344585dff',
+          title: 'New Task Title', 
+          description: 'Test Task Description',
+          status: 'pending',
+          parent: null,
+        },
       })
     ),
     patch: vi.fn(() =>
@@ -79,13 +93,29 @@ test('can add a new task', async () => {
   });
   fireEvent.click(SaveButton);
   // ✅ Debugging: Print the updated DOM
-  await waitFor(() => { 
+  await waitFor(() => {
     // console.log(screen.debug());
     const taskList = screen.getByTestId("tasks-list"); // Get the <ul> element 
     expect(taskList.innerHTML).toContain("New Task Title"); // ✅ Ensures "New Task Title" appears in the list
     expect(taskList.innerHTML).toContain("Test Task Description"); // ✅ Ensures "Test Task Description" appears in the list
   });
 });
+
+test('can edit task', async () => {
+  render(<TaskManager />);
+  const taskList = await screen.findByTestId('tasks-list');
+  expect(taskList).toBeTruthy();
+
+  // Check that the specific task exists (by task title)
+  const taskItem = within(taskList).getByText(/Some Existing Task/i);
+  expect(taskItem).toBeInTheDocument();
+
+  const taskItemList = taskItem.closest('li'); // Find the closest list item (parent element of taskItem)
+  const editTaskBtn = within(taskItemList).getByTestId('editTaskBtn'); // Get the button inside the same list item
+  expect(editTaskBtn).toBeInTheDocument();
+
+});
+
 
 test.skip('can delete a task', async () => {
   render(<TaskManager />);
