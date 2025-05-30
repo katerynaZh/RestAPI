@@ -58,12 +58,13 @@ const AddOrEditDialog = ({ open, task, statuses, onSave, onCancel}: Props) => {
           <TextArea rows={3} data-testid="input-description" placeholder="Enter task description" />
         </Item>
         {task && ( // Only show status field if task is provided (for editing)
-        <Item
+          <Item 
+          
           name="status"
           label="Status"
           rules={[{ required: true, message: 'Please select a status' }]}
         >
-          <Select placeholder="Select task status">
+          <Select data-testid="input-status" placeholder="Select task status">
             {statuses?.map((status) => (
               <Option key={status} value={status}>
                 {status}

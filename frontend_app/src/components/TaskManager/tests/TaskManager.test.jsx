@@ -14,43 +14,67 @@ window.matchMedia =
     };
   };
 
+  const statuses = ["pending", "in_progress", "completed", "archived"];
+
+
+
 // Mock axios
-vi.mock('axios', () => ({
-  default: {
-    get: vi.fn(() => Promise.resolve({ data: [
-      {
-        id: '21797e7e-f23f-42ce-ae58-ae3344585dff',
-        title: 'Some Existing Task',
-        description: 'This is a test task',
-        status: 'pending',
-        parent: null,
-      }
-    ] })),
-    post: vi.fn(() =>
-      Promise.resolve({
-        data: { 
-          id: '21797e7e-f23f-42ce-ae58-ae3344585dff',
-          title: 'New Task Title', 
-          description: 'Test Task Description',
-          status: 'pending',
-          parent: null,
-        },
-      })
-    ),
-    patch: vi.fn(() =>
-      Promise.resolve({
-        data: {
-          id: '21797e7e-f23f-42ce-ae58-ae3344585dff',
-          status: 'completed',
-          title: 'New Task',
-          description: 'Task Description',
-          parent: null,
-        },
-      })
-    ),
-    delete: vi.fn(() => Promise.resolve({})),
-  },
-}));
+vi.mock('axios', () => {
+  return {
+    default: {
+      get: vi.fn((url) => {
+        if (url === 'http://localhost:8000/v1/tasks') {
+          return Promise.resolve({
+            data: [
+              {
+                id: '21797e7e-f23f-42ce-ae58-ae3344585dff',
+                title: 'Some Existing Task',
+                description: 'This is a test task',
+                status: 'pending',
+                parent: null,
+              },
+            ],
+          });
+        }
+
+        if (url === 'http://localhost:8000/v1/tasks/statuses') {
+          return Promise.resolve({
+            data: statuses,
+          });
+        }
+
+        return Promise.reject(new Error('Unhandled GET request: ' + url));
+      }),
+
+      post: vi.fn(() =>
+        Promise.resolve({
+          data: {
+            id: '21797e7e-f23f-42ce-ae58-ae3344585dff',
+            title: 'New Task Title',
+            description: 'Test Task Description',
+            status: 'pending',
+            parent: null,
+          },
+        })
+      ),
+
+      patch: vi.fn(() =>
+        Promise.resolve({
+          data: {
+            id: '21797e7e-f23f-42ce-ae58-ae3344585dff',
+            status: 'completed',
+            title: 'Updated Task Title',
+            description: 'Updated Task Description',
+            parent: null,
+          },
+        })
+      ),
+
+      delete: vi.fn(() => Promise.resolve({})),
+    },
+  };
+});
+
 
 // test.skip('renders task list', async () => {
 //   render(<TaskManager />);
@@ -114,6 +138,49 @@ test('can edit task', async () => {
   const editTaskBtn = within(taskItemList).getByTestId('editTaskBtn'); // Get the button inside the same list item
   expect(editTaskBtn).toBeInTheDocument();
 
+  await act(async () => {
+    fireEvent.click(editTaskBtn);
+  });
+  expect(await screen.getByTestId('AddOrEditForm')).toBeInTheDocument();
+
+  const inputTitle = screen.getByTestId('input-title');
+  expect(inputTitle).toBeDefined();
+
+  const inputDescription = screen.getByTestId('input-description');
+  expect(inputDescription).toBeDefined();
+
+  const inputStatus = screen.getByTestId('input-status');
+  expect (statuses).contains(inputStatus.textContent);
+
+  const SaveButton = screen.getByTestId('dialog-saveBtn');
+  
+  expect(SaveButton).toBeDefined();
+  expect(SaveButton.textContent).toBe('Save');
+
+
+  const CancelButton = screen.getByTestId('dialog-cancelBtn');
+  expect(CancelButton).toBeDefined();
+
+  fireEvent.change(inputTitle, {
+    target: { value: "Updated Task Title" },
+  });
+  fireEvent.change(inputDescription, {
+    target: { value: "Updated Task Description" },
+  });
+  fireEvent.mouseDown(screen.getByTestId('input-status'));
+  
+  // const options = await screen.findAllByRole('option');// open dropdown
+  // expect(options).toHaveLength(statuses.length); // Check if all statuses are present
+  // // const option = await fireEvent.findByText('completed'); // select option
+  // fireEvent.click("complited");
+  // fireEvent.click(SaveButton);
+
+  // await waitFor(() => {
+  //   const updatedTaskItem = screen.getByText(/Updated Task Title/i);
+  //   expect(updatedTaskItem).toBeInTheDocument();
+  //   expect(screen.getByText(/Updated Task Description/i)).toBeInTheDocument();
+  //   expect(screen.getByTestId('21797e7e-f23f-42ce-ae58-ae3344585dff').textContent).toBe('completed');
+  // });
 });
 
 
