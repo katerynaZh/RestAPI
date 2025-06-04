@@ -1,43 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import { Input, Form, Select } from 'antd'; // add Select
+import React, { useEffect } from 'react';
+import { Input, Form, Select } from 'antd';
 import { CustomTask } from './types';
 import Dialog from '../common/Dialog';
-
 
 const { Item } = Form;
 const { TextArea } = Input;
 const { Option } = Select;
 
-type Props = {
+interface Props {
   open: boolean;
   task?: CustomTask;
   statuses?: string[];
   onSave: (task: CustomTask) => void;
   onCancel: () => void;
+}
 
-};
-
-const AddOrEditDialog = ({ open, task, statuses, onSave, onCancel}: Props) => {
+const AddOrEditDialog: React.FC<Props> = ({ open, task, statuses, onSave, onCancel }) => {
   const [form] = Form.useForm();
   const { setFieldsValue, validateFields } = form;
 
   useEffect(() => {
     if (open) {
       if (task) {
-        form.setFieldsValue(task);
+        setFieldsValue(task);
       } else {
         form.resetFields();
       }
     }
-  }, [open, task, form]);
+  }, [open, task, form, setFieldsValue]);
 
   const handleSave = () => {
-    validateFields().then((values) => {
-      onSave({ ...task, ...values });
-    });
+    validateFields().then(values => onSave({ ...task, ...values }));
   };
 
-  
+  /**
+   * SHOW STATUS DROPDOWN ONLY WHEN:
+   * 1. Editing (task is defined)
+   * 2. Statuses are fully loaded (array and not empty)
+   */
+  const showStatusField = task && Array.isArray(statuses) && statuses.length > 0;
+
   return (
     <Dialog
       open={open}
@@ -46,7 +48,7 @@ const AddOrEditDialog = ({ open, task, statuses, onSave, onCancel}: Props) => {
       onSubmit={handleSave}
       onCancel={onCancel}
     >
-      <Form form={form} data-testid="AddOrEditForm" layout="vertical">
+      <Form data-testid="AddOrEditForm" form={form} layout="vertical">
         <Item
           name="title"
           label="Title"
@@ -55,23 +57,23 @@ const AddOrEditDialog = ({ open, task, statuses, onSave, onCancel}: Props) => {
           <Input data-testid="input-title" placeholder="Enter task title" />
         </Item>
         <Item name="description" label="Description">
-          <TextArea rows={3} data-testid="input-description" placeholder="Enter task description" />
+          <TextArea data-testid="input-description" rows={3} placeholder="Enter task description" />
         </Item>
-        {task && ( // Only show status field if task is provided (for editing)
-          <Item 
-          
-          name="status"
-          label="Status"
-          rules={[{ required: true, message: 'Please select a status' }]}
-        >
-          <Select data-testid="input-status" placeholder="Select task status">
-            {statuses?.map((status) => (
-              <Option key={status} value={status}>
-                {status}
-              </Option>
-            ))}
-          </Select>
-        </Item>
+
+        {showStatusField && (
+          <Item
+            name="status"
+            label="Status"
+            rules={[{ required: true, message: 'Please select a status' }]}
+          >
+            <Select data-testid="input-status" placeholder="Select task status">
+              {statuses!.map(status => (
+                <Option key={status} value={status}>
+                  {status}
+                </Option>
+              ))}
+            </Select>
+          </Item>
         )}
       </Form>
     </Dialog>

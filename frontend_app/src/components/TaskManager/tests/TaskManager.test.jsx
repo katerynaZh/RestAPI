@@ -14,9 +14,7 @@ window.matchMedia =
     };
   };
 
-  const statuses = ["pending", "in_progress", "completed", "archived"];
-
-
+const statuses = ["pending", "in_progress", "completed", "archived"];
 
 // Mock axios
 vi.mock('axios', () => {
@@ -157,7 +155,6 @@ test('can edit task', async () => {
   expect(SaveButton).toBeDefined();
   expect(SaveButton.textContent).toBe('Save');
 
-
   const CancelButton = screen.getByTestId('dialog-cancelBtn');
   expect(CancelButton).toBeDefined();
 
@@ -167,13 +164,14 @@ test('can edit task', async () => {
   fireEvent.change(inputDescription, {
     target: { value: "Updated Task Description" },
   });
-  fireEvent.mouseDown(screen.getByTestId('input-status'));
-  
-  // const options = await screen.findAllByRole('option');// open dropdown
-  // expect(options).toHaveLength(statuses.length); // Check if all statuses are present
-  // // const option = await fireEvent.findByText('completed'); // select option
-  // fireEvent.click("complited");
-  // fireEvent.click(SaveButton);
+
+  const selectorButton = inputStatus.querySelector('.ant-select-selector');
+  if (!selectorButton) {
+    throw new Error('Selector button not found');
+  }
+  fireEvent.mouseDown(selectorButton);
+  fireEvent.click(await screen.findByText('completed'));
+  fireEvent.click(SaveButton);
 
   // await waitFor(() => {
   //   const updatedTaskItem = screen.getByText(/Updated Task Title/i);

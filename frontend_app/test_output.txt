@@ -1,0 +1,376 @@
+
+> frontend_app@0.0.0 test
+> vitest run --environment=jsdom
+
+
+[1m[46m RUN [49m[22m [36mv3.1.4 [39m[90mC:/Users/VDronov/Documents/Repos/Private/RestAPI/frontend_app[39m
+
+ [2m[90mΓåô[39m[22m src/components/TaskManager/tests/AddOrEditDialog.test.jsx [2m([22m[2m1 test[22m[2m | [22m[33m1 skipped[39m[2m)[22m
+[90mstdout[2m | src/components/TaskManager/tests/TaskManager.test.jsx[2m > [22m[2mcan add a new task
+[22m[39mrender
+render statuses
+
+[90mstdout[2m | src/tests/App.test.jsx[2m > [22m[2mrenders app
+[22m[39mrender
+render statuses
+
+[90mstdout[2m | src/tests/App.test.jsx[2m > [22m[2mrenders app
+[22m[39mUnmounting useTasks
+Unmounting statuses
+
+ [32mΓ£ô[39m src/tests/App.test.jsx [2m([22m[2m1 test[22m[2m)[22m[32m 233[2mms[22m[39m
+[90mstdout[2m | src/components/TaskManager/tests/TaskManager.test.jsx[2m > [22m[2mcan add a new task
+[22m[39mUnmounting useTasks
+Unmounting statuses
+
+[90mstdout[2m | src/components/TaskManager/tests/TaskManager.test.jsx[2m > [22m[2mcan edit task
+[22m[39mrender
+render statuses
+
+[90mstdout[2m | src/components/TaskManager/tests/TaskManager.test.jsx[2m > [22m[2mcan edit task
+[22m[39mUnmounting useTasks
+Unmounting statuses
+
+ [31mΓ¥»[39m src/components/TaskManager/tests/TaskManager.test.jsx [2m([22m[2m5 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m3 skipped[39m[2m)[22m[33m 1753[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m can add a new task [33m 489[2mms[22m[39m
+[31m   [31m├ù[31m can edit task[39m[33m 1262[2mms[22m[39m
+[31m     ΓåÆ Waiting for statuses to render...
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"ant-layout sc-dYOLZc gMUQIp css-dev-only-do-not-override-vrrzze"[31m
+      [36m>[31m
+        [36m<main[31m
+          [33mclass[31m=[32m"ant-layout-content sc-jMpmlX Qzzta css-dev-only-do-not-override-vrrzze"[31m
+        [36m>[31m
+          [36m<h1[31m
+            [33mdata-testid[31m=[32m"taskmanager-title"[31m
+          [36m>[31m
+            [0mTask Manager[0m
+          [36m</h1>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"ant-list ant-list-split ant-list-bordered sc-bXdtCk jwzlkp css-dev-only-do-not-override-vrrzze"[31m
+            [33mdata-testid[31m=[32m"tasks-list"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"ant-list-header"[31m
+            [36m>[31m
+              [36m<h2[31m
+                [33mclass[31m=[32m"ant-typography css-dev-only-do-not-override-vrrzze"[31m
+              [36m>[31m
+                [0mTask List[0m
+              [36m</h2>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"ant-spin-nested-loading css-dev-only-do-not-override-vrrzze"[31m
+            [36m>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"ant-spin-container"[31m
+              [36m>[31m
+                [36m<ul[31m
+                  [33mclass[31m=[32m"ant-list-items"[31m
+                [36m>[31m
+                  [36m<li[31m
+                    [33mclass[31m=[32m"ant-list-item sc-hKDTPf idmLdb"[31m
+                  [36m>[31m
+                    [36m<div[31m
+                      [33mclass[31m=[32m"sc-fmZSGO eRvpai"[31m
+                    [36m>[31m
+                      [36m<span[31m
+                        [33mclass[31m=[32m"ant-typography css-dev-only-do-not-override-vrrzze"[31m
+                      [36m>[31m
+                        [36m<strong>[31m
+                          [0mSome Existing Task[0m
+                        [36m</strong>[31m
+                      [36m</span>[31m
+                      [36m<article[31m
+                        [33mclass[31m=[32m"ant-typography css-dev-only-do-not-override-vrrzze"[31m
+                      [36m>[31m
+                        [0mThis is a test task[0m
+                      [36m</article>[31m
+                    [36m</div>[31m
+                    [36m<span[31m
+                      [33mclass[31m=[32m"sc-gwsNht fMfxWN"[31m
+                    [36m>[31m
+                      [0mpending[0m
+                    [36m</span>[31m
+                    [36m<ul[31m
+                      [33mclass[31m=[32m"ant-list-item-action"[31m
+                    [36m>[31m
+                      [36m<li>[31m
+                        [36m<button[31m
+                          [33mclass[31m=[32m"ant-btn css-dev-only-do-not-override-vrrzze ant-btn-link ant-btn-color-link ant-btn-variant-link"[31m
+                          [33mdata-testid[31m=[32m"editTaskBtn"[31m
+                          [33mtype[31m=[32m"button"[31m
+                        [36m>[31m
+                          [36m<span>[31m
+                            [0mEdit[0m
+                          [36m</span>[31m
+                        [36m</button>[31m
+                        [36m<em[31m
+                          [33mclass[31m=[32m"ant-list-item-action-split"[31m
+                        [36m/>[31m
+                      [36m</li>[31m
+                      [36m<li>[31m
+                        [36m<button[31m
+                          [33mclass[31m=[32m"ant-btn css-dev-only-do-not-override-vrrzze ant-btn-link ant-btn-color-link ant-btn-variant-link"[31m
+                          [33mdata-testid[31m=[32m"deleteTaskBtn"[31m
+                          [33mtype[31m=[32m"button"[31m
+                        [36m>[31m
+                          [36m<span>[31m
+                            [0mDelete[0m
+                          [36m</span>[31m
+                        [36m</button>[31m
+                      [36m</li>[31m
+                    [36m</ul>[31m
+                  [36m</li>[31m
+                [36m</ul>[31m
+              [36m</div>[31m
+            [36m</div>[31m
+          [36m</div>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"ant-btn css-dev-only-do-not-override-vrrzze ant-btn-primary ant-btn-color-primary ant-btn-variant-solid sc-hoLldG kguBTK"[31m
+            [33mdata-testid[31m=[32m"addTaskBtn"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span>[31m
+              [0mAdd Task[0m
+            [36m</span>[31m
+          [36m</button>[31m
+        [36m</main>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"ant-modal-root css-dev-only-do-not-override-vrrzze"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"ant-modal-mask"[31m
+        [36m/>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"ant-modal-wrap"[31m
+          [33mtabindex[31m=[32m"-1"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33maria-labelledby[31m=[32m"test-id"[31m
+            [33maria-modal[31m=[32m"true"[31m
+            [33mclass[31m=[32m"ant-modal css-dev-only-do-not-override-vrrzze"[31m
+            [33mrole[31m=[32m"dialog"[31m
+            [33mstyle[31m=[32m"width: 520px;"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mstyle[31m=[32m"outline: none;"[31m
+              [33mtabindex[31m=[32m"0"[31m
+            [36m>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"ant-modal-content"[31m
+              [36m>[31m
+                [36m<button[31m
+                  [33maria-label[31m=[32m"Close"[31m
+                  [33mclass[31m=[32m"ant-modal-close"[31m
+                  [33mtype[31m=[32m"button"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33maria-label[31m=[32m"Close"[31m
+                    [33mclass[31m=[32m"ant-modal-close-x"[31m
+                  [36m>[31m
+                    [36m<span[31m
+                      [33maria-label[31m=[32m"close"[31m
+                      [33mclass[31m=[32m"anticon anticon-close ant-modal-close-icon"[31m
+                      [33mrole[31m=[32m"img"[31m
+                    [36m>[31m
+                      [36m<svg[31m
+                        [33maria-hidden[31m=[32m"true"[31m
+                        [33mdata-icon[31m=[32m"close"[31m
+                        [33mfill[31m=[32m"currentColor"[31m
+                        [33mfill-rule[31m=[32m"evenodd"[31m
+                        [33mfocusable[31m=[32m"false"[31m
+                        [33mheight[31m=[32m"1em"[31m
+                       ...[39m
+   [2m[90mΓåô[39m[22m can delete a task
+   [2m[90mΓåô[39m[22m can mark a task as completed
+   [2m[90mΓåô[39m[22m displays empty state when no tasks are available
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 1 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  src/components/TaskManager/tests/TaskManager.test.jsx > can edit task
+Error: Waiting for statuses to render...
+
+Ignored nodes: comments, script, style
+<html>
+  <head />
+  <body>
+    <div>
+      <div
+        class="ant-layout sc-dYOLZc gMUQIp css-dev-only-do-not-override-vrrzze"
+      >
+        <main
+          class="ant-layout-content sc-jMpmlX Qzzta css-dev-only-do-not-override-vrrzze"
+        >
+          <h1
+            data-testid="taskmanager-title"
+          >
+            Task Manager
+          </h1>
+          <div
+            class="ant-list ant-list-split ant-list-bordered sc-bXdtCk jwzlkp css-dev-only-do-not-override-vrrzze"
+            data-testid="tasks-list"
+          >
+            <div
+              class="ant-list-header"
+            >
+              <h2
+                class="ant-typography css-dev-only-do-not-override-vrrzze"
+              >
+                Task List
+              </h2>
+            </div>
+            <div
+              class="ant-spin-nested-loading css-dev-only-do-not-override-vrrzze"
+            >
+              <div
+                class="ant-spin-container"
+              >
+                <ul
+                  class="ant-list-items"
+                >
+                  <li
+                    class="ant-list-item sc-hKDTPf idmLdb"
+                  >
+                    <div
+                      class="sc-fmZSGO eRvpai"
+                    >
+                      <span
+                        class="ant-typography css-dev-only-do-not-override-vrrzze"
+                      >
+                        <strong>
+                          Some Existing Task
+                        </strong>
+                      </span>
+                      <article
+                        class="ant-typography css-dev-only-do-not-override-vrrzze"
+                      >
+                        This is a test task
+                      </article>
+                    </div>
+                    <span
+                      class="sc-gwsNht fMfxWN"
+                    >
+                      pending
+                    </span>
+                    <ul
+                      class="ant-list-item-action"
+                    >
+                      <li>
+                        <button
+                          class="ant-btn css-dev-only-do-not-override-vrrzze ant-btn-link ant-btn-color-link ant-btn-variant-link"
+                          data-testid="editTaskBtn"
+                          type="button"
+                        >
+                          <span>
+                            Edit
+                          </span>
+                        </button>
+                        <em
+                          class="ant-list-item-action-split"
+                        />
+                      </li>
+                      <li>
+                        <button
+                          class="ant-btn css-dev-only-do-not-override-vrrzze ant-btn-link ant-btn-color-link ant-btn-variant-link"
+                          data-testid="deleteTaskBtn"
+                          type="button"
+                        >
+                          <span>
+                            Delete
+                          </span>
+                        </button>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <button
+            class="ant-btn css-dev-only-do-not-override-vrrzze ant-btn-primary ant-btn-color-primary ant-btn-variant-solid sc-hoLldG kguBTK"
+            data-testid="addTaskBtn"
+            type="button"
+          >
+            <span>
+              Add Task
+            </span>
+          </button>
+        </main>
+      </div>
+    </div>
+    <div>
+      <div
+        class="ant-modal-root css-dev-only-do-not-override-vrrzze"
+      >
+        <div
+          class="ant-modal-mask"
+        />
+        <div
+          class="ant-modal-wrap"
+          tabindex="-1"
+        >
+          <div
+            aria-labelledby="test-id"
+            aria-modal="true"
+            class="ant-modal css-dev-only-do-not-override-vrrzze"
+            role="dialog"
+            style="width: 520px;"
+          >
+            <div
+              style="outline: none;"
+              tabindex="0"
+            >
+              <div
+                class="ant-modal-content"
+              >
+                <button
+                  aria-label="Close"
+                  class="ant-modal-close"
+                  type="button"
+                >
+                  <span
+                    aria-label="Close"
+                    class="ant-modal-close-x"
+                  >
+                    <span
+                      aria-label="close"
+                      class="anticon anticon-close ant-modal-close-icon"
+                      role="img"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        data-icon="close"
+                        fill="currentColor"
+                        fill-rule="evenodd"
+                        focusable="false"
+                        height="1em"
+                       ...
+ Γ¥» __vi_import_1__.waitFor.timeout src/components/TaskManager/tests/TaskManager.test.jsx:172:13
+    170|     const statusItems = document.querySelectorAll('.ant-select-item-opΓÇª
+    171|     if (statusItems.length === 0) {
+    172|       throw new Error('Waiting for statuses to render...');
+       |             ^
+    173|     }
+    174|   }, { timeout: 1000 });
+ Γ¥» runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ Γ¥» checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ Γ¥» Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/1]ΓÄ»
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (3)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[2m | [22m[33m4 skipped[39m[90m (7)[39m
+[2m   Start at [22m 21:56:00
+[2m   Duration [22m 11.84s[2m (transform 209ms, setup 1.32s, collect 21.65s, tests 1.99s, environment 3.72s, prepare 1.25s)[22m
+

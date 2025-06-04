@@ -117,7 +117,7 @@ const TaskManager = () => {
           key={taskInEdit?.id} // when pass key, the dialog will be treated as a new one, so no need to reset fields inside dialog
           open={isDialogOpen}
           task={taskInEdit}
-          statuses={statuses}
+          statuses={taskInEdit && statuses?.length ? statuses : undefined}
           onSave={onSave}
           onCancel={onEditStop}
         />
