@@ -1,7 +1,7 @@
 // Mock window.matchMediaimport { test, expect, vi } from "vitest"; // ✅ Import only what we need
 import { render, screen, fireEvent, within, waitFor,act } from '@testing-library/react';
-// import "@testing-library/jest-dom"; // ✅ Ensures matchers are loaded
 import TaskManager from '../index';
+import { ConfirmationDialogProvider } from '../../../contexts/ConfirmationDialogContext';
 import { test, expect, vi } from 'vitest';
 
 window.matchMedia =
@@ -73,12 +73,6 @@ vi.mock('axios', () => {
   };
 });
 
-
-// test.skip('renders task list', async () => {
-//   render(<TaskManager />);
-//   expect(screen.getByTestId('taskmanager-title')).toBeTruthy();
-// });
-
 test('can add a new task', async () => {
   render(<TaskManager />);
   expect(screen.getByTestId('taskmanager-title')).toBeTruthy();
@@ -89,7 +83,6 @@ test('can add a new task', async () => {
     fireEvent.click(addTaskBtn);
   });
   expect(await screen.getByTestId('AddOrEditForm')).toBeInTheDocument();
-  /* assert on the output */
   
   const inputTitle = screen.getByTestId('input-title');
   expect(inputTitle).toBeDefined();
@@ -97,8 +90,8 @@ test('can add a new task', async () => {
   const inputDescription = screen.getByTestId('input-description');
   expect(inputDescription).toBeDefined();
 
-  const SaveButton = screen.getByTestId('dialog-saveBtn');
-  // SaveButton.textContent = 'Save';
+  const SaveButton = screen.getByTestId('dialog-confirmBtn');
+
   expect(SaveButton).toBeDefined();
   expect(SaveButton.textContent).toBe('Add');
 
@@ -114,9 +107,7 @@ test('can add a new task', async () => {
     target: { value: "Test Task Description" },
   });
   fireEvent.click(SaveButton);
-  // ✅ Debugging: Print the updated DOM
   await waitFor(() => {
-    // console.log(screen.debug());
     const taskList = screen.getByTestId("tasks-list"); // Get the <ul> element 
     expect(taskList.innerHTML).toContain("New Task Title"); // ✅ Ensures "New Task Title" appears in the list
     expect(taskList.innerHTML).toContain("Test Task Description"); // ✅ Ensures "Test Task Description" appears in the list
@@ -150,7 +141,7 @@ test('can edit task', async () => {
   const inputStatus = screen.getByTestId('input-status');
   expect (statuses).contains(inputStatus.textContent);
 
-  const SaveButton = screen.getByTestId('dialog-saveBtn');
+  const SaveButton = screen.getByTestId('dialog-confirmBtn');
   
   expect(SaveButton).toBeDefined();
   expect(SaveButton.textContent).toBe('Save');
@@ -173,64 +164,53 @@ test('can edit task', async () => {
   fireEvent.click(await screen.findByText('completed'));
   fireEvent.click(SaveButton);
 
-  // await waitFor(() => {
-  //   const updatedTaskItem = screen.getByText(/Updated Task Title/i);
-  //   expect(updatedTaskItem).toBeInTheDocument();
-  //   expect(screen.getByText(/Updated Task Description/i)).toBeInTheDocument();
-  //   expect(screen.getByTestId('21797e7e-f23f-42ce-ae58-ae3344585dff').textContent).toBe('completed');
-  // });
+  const updatedTaskList = await screen.findByTestId('tasks-list');
+  expect(taskList).toBeTruthy();
+
+  // Check that the specific task exists (by task title)
+  const updatedTaskItem = within(updatedTaskList).getByText(/Updated Task Title/i);
+  expect(updatedTaskItem).toBeInTheDocument();
+
+  const updatedTaskItemParent = updatedTaskItem.closest('li'); // Find the closest list item (parent element of updatedTaskItem)
+
+  // Check that the updated task description and status are also present
+  const updatedTaskDescription = within(updatedTaskItemParent).getByText(/Updated Task Description/i);
+  expect(updatedTaskDescription).toBeInTheDocument();
+  
+  // Check that the updated task status is displayed
+  const updatedTaskStatus = within(updatedTaskItemParent).getByText(/completed/i);
+  expect(updatedTaskStatus).toBeInTheDocument();
 });
 
 
-test.skip('can delete a task', async () => {
-  render(<TaskManager />);
-  fireEvent.click(screen.getByTestId('delete-task-btn-1')); // Assuming task with id 1 exists
+test('can delete a task', async () => {
+  render(
+    <ConfirmationDialogProvider>
+      <TaskManager />
+    </ConfirmationDialogProvider>
+  );
+  const taskList = await screen.findByTestId('tasks-list');
+  expect(taskList).toBeTruthy();
 
-  await waitFor(() => {
-    expect(screen.queryByText('New Task')).toBeNull();
+  // Check that the specific task exists (by task title)
+  const taskItem = within(taskList).getByText(/Some Existing Task/i);
+  expect(taskItem).toBeInTheDocument();
+
+  const taskItemList = taskItem.closest('li'); // Find the closest list item (parent element of taskItem)
+  const delTaskBtn = within(taskItemList).getByTestId('deleteTaskBtn'); // Get the button inside the same list item
+  expect(delTaskBtn).toBeInTheDocument();
+
+  await act(async () => {
+    fireEvent.click(delTaskBtn);
   });
-});
+  
+  const confirmDlg = await screen.getByTestId('dialog');
+  const confirmBtn = within(confirmDlg).getByTestId('dialog-confirmBtn');
 
-test.skip('can mark a task as completed', async () => {
-  render(<TaskManager />);
-  fireEvent.click(screen.getByTestId('complete-task-btn-1')); // Assuming task with id 1 exists
+  // ⑤  confirm and assert it disappeared
+  fireEvent.click(confirmBtn);
+  await waitFor(() =>
+    expect(screen.queryByText(/Some Existing Task/i)).not.toBeInTheDocument(),
+  );
 
-  await waitFor(() => {
-    expect(screen.getByTestId('task-status-1').textContent).toBe('completed');
-  });
-});
-
-// Mock window.matchMedia
-// window.matchMedia = window.matchMedia || function() {
-//   return {
-//     matches: false,
-//     addListener: function() {},
-//     removeListener: function() {}
-//   };
-// };
-
-// ✅ Mock axios properly
-// vi.mock("axios", () => ({
-//   default: {
-//     get: vi.fn(() => Promise.resolve({ data: [] })), // ✅ Mock an empty task list
-//     post: vi.fn(() =>
-//       Promise.resolve({
-//         data: { id: 1, title: "New Task", description: "Task Description", status: "pending" },
-//       })
-//     ),
-//   },
-// }));
-
-// test("renders task list", async () => {
-//   render(<App />);
-//   expect(screen.getByTestId("tasks-list")).toBeTruthy(); // ✅ Ensures the component renders
-// });
-
-
-
-test.skip("displays empty state when no tasks are available", async () => {
-  render(<App />);
-  waitFor(() => {
-    expect(screen.getByText("ababagalamaga")).toBeTruthy();
-  });
 });

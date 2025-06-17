@@ -46,7 +46,7 @@ describe('AddOrEditDialog', () => {
       ''
     );
     expect(screen.queryByText('Status')).not.toBeInTheDocument();
-    expect(screen.getByTestId('dialog-saveBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('dialog-confirmBtn')).toBeInTheDocument();
     expect(screen.getByText('Add Task')).toBeInTheDocument();
   });
 

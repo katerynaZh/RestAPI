@@ -20,6 +20,7 @@ const Dialog = ({
 }: Props) => {
   return (
     <Modal
+      data-testid="dialog"
       title={title}
       open={open}
       onCancel={onCancel}
@@ -29,7 +30,7 @@ const Dialog = ({
         </Button>,
         <Button
           key="save"
-          data-testid="dialog-saveBtn"
+          data-testid="dialog-confirmBtn"
           type="primary"
           onClick={onSubmit}
         >
