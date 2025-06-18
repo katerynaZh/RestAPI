@@ -1,4 +1,19 @@
-import { render, screen, fireEvent, within } from '@testing-library/react';
+/**
+ * Unit tests for the AddOrEditDialog component.
+ *
+ * These tests verify the rendering and behavior of the AddOrEditDialog component
+ * in different scenarios, such as adding a new task or editing an existing task.
+ *
+ * Tests:
+ * - `renders the dialog with empty fields for adding a new task`:
+ *   Verifies that the dialog renders correctly with empty fields when adding a new task.
+ *   Checks for the presence of input fields, save button, and cancel button.
+ *
+ * - `renders the dialog with pre-filled fields for editing a task`:
+ *   Verifies that the dialog renders correctly with pre-filled fields when editing an existing task.
+ *   Checks for the presence of input fields with pre-filled values, status dropdown, save button, and cancel button.
+ */
+import { render, screen } from '@testing-library/react';
 import { vi, describe, it, expect, afterEach } from 'vitest';
 import AddOrEditDialog from '../AddOrEditDialog';
 
@@ -31,175 +46,63 @@ describe('AddOrEditDialog', () => {
   });
 
   // Rendering Tests
-  it.skip('renders the dialog with empty fields for adding a new task', () => {
+  it('renders the dialog with empty fields for adding a new task', () => {
     render(
       <AddOrEditDialog
         open={true}
+        onSave={mockOnSave}
+        onCancel={mockOnCancel}
+      />
+    );
+
+      expect(screen.getByTestId('AddOrEditForm')).toBeInTheDocument();
+    
+      const inputTitle = screen.getByTestId('input-title');
+      expect(inputTitle).toBeDefined();
+    
+      const inputDescription = screen.getByTestId('input-description');
+      expect(inputDescription).toBeDefined();
+    
+      const saveButton = screen.getByTestId('dialog-confirmBtn');
+      expect(saveButton).toBeDefined();
+      expect(saveButton.textContent).toBe('Add');
+    
+      const cancelButton = screen.getByTestId('dialog-cancelBtn');
+      expect(cancelButton).toBeDefined();
+    
+  });
+
+  
+  it('renders the dialog with pre-filled fields for editing a task', () => {
+    render(
+      <AddOrEditDialog
+        open={true}
+        task={mockTask}
         onSave={mockOnSave}
         onCancel={mockOnCancel}
         statuses={mockStatuses}
       />
     );
 
-    expect(screen.getByPlaceholderText('Enter task title')).toHaveValue('');
-    expect(screen.getByPlaceholderText('Enter task description')).toHaveValue(
-      ''
-    );
-    expect(screen.queryByText('Status')).not.toBeInTheDocument();
-    expect(screen.getByTestId('dialog-confirmBtn')).toBeInTheDocument();
-    expect(screen.getByText('Add Task')).toBeInTheDocument();
+    expect(screen.getByTestId('AddOrEditForm')).toBeInTheDocument();
+    
+    const inputTitle = screen.getByTestId('input-title');
+    expect(inputTitle).toBeDefined();
+    expect(inputTitle.value).toBe(mockTask.title);
+  
+    const inputDescription = screen.getByTestId('input-description');
+    expect(inputDescription).toBeDefined();
+    expect(inputDescription.value).toBe(mockTask.description);
+
+    const inputStatus = screen.getByTestId('input-status');
+    expect(inputStatus).toBeDefined();
+    expect(mockStatuses).toContain(inputStatus.textContent);
+
+    const saveButton = screen.getByTestId('dialog-confirmBtn');
+    expect(saveButton).toBeDefined();
+    expect(saveButton.textContent).toBe('Save');
+  
+    const cancelButton = screen.getByTestId('dialog-cancelBtn');
+    expect(cancelButton).toBeDefined();
   });
-
-  
-  // it('renders the dialog with pre-filled fields for editing a task', () => {
-  //   render(
-  //     <AddOrEditDialog
-  //       open={true}
-  //       task={mockTask}
-  //       onSave={mockOnSave}
-  //       onCancel={mockOnCancel}
-  //       statuses={mockStatuses}
-  //     />
-  //   );
-
-  //   expect(screen.getByPlaceholderText('Enter task title')).toHaveValue(
-  //     'Test Task'
-  //   );
-  //   expect(screen.getByPlaceholderText('Enter task description')).toHaveValue(
-  //     'Test Description'
-  //   );
-  //   expect(screen.getByText('Status')).toBeInTheDocument();
-  //   expect(screen.getByText('Edit Task')).toBeInTheDocument();
-  // });
-
-  // Validation Tests
-  // it('shows validation error when the title field is empty', async () => {
-  //   render(
-  //     <AddOrEditDialog
-  //       open={true}
-  //       onSave={mockOnSave}
-  //       onCancel={mockOnCancel}
-  //       statuses={mockStatuses}
-  //     />
-  //   );
-
-  //   fireEvent.click(screen.getByText('Add'));
-  //   expect(await screen.findByText('Title is required')).toBeInTheDocument();
-  // });
-
-  // it('shows validation error when the status field is empty for editing', async () => {
-  //   render(
-  //     <AddOrEditDialog
-  //       open={true}
-  //       task={mockTask}
-  //       onSave={mockOnSave}
-  //       onCancel={mockOnCancel}
-  //       statuses={mockStatuses}
-  //     />
-  //   );
-
-  //   fireEvent.change(screen.getByPlaceholderText('Enter task title'), {
-  //     target: { value: '' },
-  //   });
-  //   fireEvent.click(screen.getByText('Save'));
-  //   expect(await screen.findByText('Title is required')).toBeInTheDocument();
-  // });
-
-  // // Interaction Tests
-  // it('calls onSave with correct data when adding a new task', async () => {
-  //   render(
-  //     <AddOrEditDialog
-  //       open={true}
-  //       onSave={mockOnSave}
-  //       onCancel={mockOnCancel}
-  //       statuses={mockStatuses}
-  //     />
-  //   );
-
-  //   fireEvent.change(screen.getByPlaceholderText('Enter task title'), {
-  //     target: { value: 'New Task' },
-  //   });
-  //   fireEvent.change(screen.getByPlaceholderText('Enter task description'), {
-  //     target: { value: 'New Description' },
-  //   });
-  //   fireEvent.click(screen.getByText('Add'));
-
-  //   expect(mockOnSave).toHaveBeenCalledWith({
-  //     title: 'New Task',
-  //     description: 'New Description',
-  //   });
-  // });
-
-  // it('calls onSave with updated data when editing a task', async () => {
-  //   render(
-  //     <AddOrEditDialog
-  //       open={true}
-  //       task={mockTask}
-  //       onSave={mockOnSave}
-  //       onCancel={mockOnCancel}
-  //       statuses={mockStatuses}
-  //     />
-  //   );
-
-  //   fireEvent.change(screen.getByPlaceholderText('Enter task title'), {
-  //     target: { value: 'Updated Task' },
-  //   });
-  //   fireEvent.change(screen.getByPlaceholderText('Enter task description'), {
-  //     target: { value: 'Updated Description' },
-  //   });
-  //   fireEvent.change(screen.getByRole('combobox'), {
-  //     target: { value: 'completed' },
-  //   });
-  //   fireEvent.click(screen.getByText('Save'));
-
-  //   expect(mockOnSave).toHaveBeenCalledWith({
-  //     ...mockTask,
-  //     title: 'Updated Task',
-  //     description: 'Updated Description',
-  //     status: 'completed',
-  //   });
-  // });
-
-  // it('calls onCancel when the cancel button is clicked', () => {
-  //   render(
-  //     <AddOrEditDialog
-  //       open={true}
-  //       onSave={mockOnSave}
-  //       onCancel={mockOnCancel}
-  //       statuses={mockStatuses}
-  //     />
-  //   );
-
-  //   fireEvent.click(screen.getByText('Cancel'));
-  //   expect(mockOnCancel).toHaveBeenCalled();
-  // });
-
-  // // Conditional Rendering Tests
-  // it('does not render the status field when adding a new task', () => {
-  //   render(
-  //     <AddOrEditDialog
-  //       open={true}
-  //       onSave={mockOnSave}
-  //       onCancel={mockOnCancel}
-  //       statuses={mockStatuses}
-  //     />
-  //   );
-
-  //   expect(screen.queryByText('Status')).not.toBeInTheDocument();
-  // });
-
-  // it('renders the status field when editing an existing task', () => {
-  //   render(
-  //     <AddOrEditDialog
-  //       open={true}
-  //       task={mockTask}
-  //       onSave={mockOnSave}
-  //       onCancel={mockOnCancel}
-  //       statuses={mockStatuses}
-  //     />
-  //   );
-
-  //   expect(screen.getByText('Status')).toBeInTheDocument();
-  // });
-  
 });

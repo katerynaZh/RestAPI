@@ -1,5 +1,29 @@
-// Mock window.matchMediaimport { test, expect, vi } from "vitest"; // ✅ Import only what we need
-import { render, screen, fireEvent, within, waitFor,act } from '@testing-library/react';
+/**
+ * Unit tests for the TaskManager component.
+ * These tests cover the following functionalities:
+ * 
+ * 1. Adding a new task:
+ *    - Renders the TaskManager component.
+ *    - Opens the "Add Task" form and fills in the task details.
+ *    - Submits the form and verifies that the new task appears in the task list.
+ * 
+ * 2. Editing an existing task:
+ *    - Renders the TaskManager component.
+ *    - Locates an existing task in the task list.
+ *    - Opens the "Edit Task" form, updates the task details, and changes the status.
+ *    - Submits the form and verifies that the updated task details are reflected in the task list.
+ * 
+ * 3. Deleting a task:
+ *    - Renders the TaskManager component within a ConfirmationDialogProvider.
+ *    - Locates an existing task in the task list.
+ *    - Triggers the delete action and confirms the deletion in the confirmation dialog.
+ *    - Verifies that the task is removed from the task list.
+ * 
+ * Mocking:
+ * - Axios is mocked to simulate API responses for GET, POST, PATCH, and DELETE requests.
+ * - Mock data includes task details and available statuses.
+ */
+import { render, screen, fireEvent, within, waitFor, act } from '@testing-library/react';
 import TaskManager from '../index';
 import { ConfirmationDialogProvider } from '../../../contexts/ConfirmationDialogContext';
 import { test, expect, vi } from 'vitest';
@@ -90,14 +114,14 @@ test('can add a new task', async () => {
   const inputDescription = screen.getByTestId('input-description');
   expect(inputDescription).toBeDefined();
 
-  const SaveButton = screen.getByTestId('dialog-confirmBtn');
+  const saveButton = screen.getByTestId('dialog-confirmBtn');
 
-  expect(SaveButton).toBeDefined();
-  expect(SaveButton.textContent).toBe('Add');
+  expect(saveButton).toBeDefined();
+  expect(saveButton.textContent).toBe('Add');
 
 
-  const CancelButton = screen.getByTestId('dialog-cancelBtn');
-  expect(CancelButton).toBeDefined();
+  const cancelButton = screen.getByTestId('dialog-cancelBtn');
+  expect(cancelButton).toBeDefined();
 
 
   fireEvent.change(inputTitle, {
@@ -106,7 +130,7 @@ test('can add a new task', async () => {
   fireEvent.change(inputDescription, {
     target: { value: "Test Task Description" },
   });
-  fireEvent.click(SaveButton);
+  fireEvent.click(saveButton);
   await waitFor(() => {
     const taskList = screen.getByTestId("tasks-list"); // Get the <ul> element 
     expect(taskList.innerHTML).toContain("New Task Title"); // ✅ Ensures "New Task Title" appears in the list
@@ -141,13 +165,13 @@ test('can edit task', async () => {
   const inputStatus = screen.getByTestId('input-status');
   expect (statuses).contains(inputStatus.textContent);
 
-  const SaveButton = screen.getByTestId('dialog-confirmBtn');
+  const saveButton = screen.getByTestId('dialog-confirmBtn');
   
-  expect(SaveButton).toBeDefined();
-  expect(SaveButton.textContent).toBe('Save');
+  expect(saveButton).toBeDefined();
+  expect(saveButton.textContent).toBe('Save');
 
-  const CancelButton = screen.getByTestId('dialog-cancelBtn');
-  expect(CancelButton).toBeDefined();
+  const cancelButton = screen.getByTestId('dialog-cancelBtn');
+  expect(cancelButton).toBeDefined();
 
   fireEvent.change(inputTitle, {
     target: { value: "Updated Task Title" },
@@ -162,7 +186,7 @@ test('can edit task', async () => {
   }
   fireEvent.mouseDown(selectorButton);
   fireEvent.click(await screen.findByText('completed'));
-  fireEvent.click(SaveButton);
+  fireEvent.click(saveButton);
 
   const updatedTaskList = await screen.findByTestId('tasks-list');
   expect(taskList).toBeTruthy();
