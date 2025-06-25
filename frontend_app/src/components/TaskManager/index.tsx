@@ -1,5 +1,6 @@
 // React library and necessary hooks
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+
 
 // Importing UI components from Ant Design library
 import { Button, Layout, notification } from 'antd';
@@ -10,7 +11,7 @@ import useTasks from './api/useTasks'; // uncomment this line if you're using th
 // import useTasks from './mocked/useTasks';
 
 // Task type definition (title, id, status, etc.)
-import { CustomTask, CustomBaseTask } from './types';
+import { CustomTask } from './types';
 
 // Components for rendering the task list and the modal dialog
 import TasksList from './TasksList';

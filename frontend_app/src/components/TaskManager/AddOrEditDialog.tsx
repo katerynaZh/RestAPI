@@ -20,13 +20,13 @@ const AddOrEditDialog: React.FC<Props> = ({ open, task, statuses, onSave, onCanc
   const { setFieldsValue, validateFields } = form;
 
   useEffect(() => {
-    if (open) {
-      if (task) {
-        setFieldsValue(task);
-      } else {
-        form.resetFields();
-      }
-    }
+    if (!open) return; 
+
+    if (task) {
+      setFieldsValue(task);
+    } else {
+      form.resetFields();
+    }    
   }, [open, task, form, setFieldsValue]);
 
   const handleSave = () => {
@@ -67,7 +67,7 @@ const AddOrEditDialog: React.FC<Props> = ({ open, task, statuses, onSave, onCanc
             rules={[{ required: true, message: 'Please select a status' }]}
           >
             <Select data-testid="input-status" placeholder="Select task status">
-              {statuses!.map(status => (
+              {statuses?.map(status => (
                 <Option key={status} value={status}>
                   {status}
                 </Option>
