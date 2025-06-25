@@ -1,58 +1,45 @@
+// Mock window.matchMediaimport { test, expect, vi } from "vitest"; // ✅ Import only what we need
+import { render, screen, act } from '@testing-library/react';
+import App from '../App';
+import { test, expect, vi } from 'vitest';
 
-import { test, expect, vi } from "vitest"; // ✅ Import only what we need
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-// import "@testing-library/jest-dom"; // ✅ Ensures matchers are loaded
-import App from "../App";
-import TaskManager from "../components/TaskManager";
-
-// Mock window.matchMedia
-window.matchMedia = window.matchMedia || function() {
-  return {
-    matches: false,
-    addListener: function() {},
-    removeListener: function() {}
+window.matchMedia =
+  window.matchMedia ||
+  function () {
+    return {
+      matches: false,
+      addListener: function () {},
+      removeListener: function () {},
+    };
   };
-};
 
-// ✅ Mock axios properly
-vi.mock("axios", () => ({
+// Mock axios
+vi.mock('axios', () => ({
   default: {
-    get: vi.fn(() => Promise.resolve({ data: [] })), // ✅ Mock an empty task list
+    get: vi.fn(() => Promise.resolve({ data: [] })),
     post: vi.fn(() =>
       Promise.resolve({
-        data: { id: 1, title: "New Task", description: "Task Description", status: "pending" },
+        data: { title: 'New Task', description: 'Task Description' },
       })
     ),
+    patch: vi.fn(() =>
+      Promise.resolve({
+        data: {
+          id: '21797e7e-f23f-42ce-ae58-ae3344585dff',
+          status: 'completed',
+          title: 'New Task',
+          description: 'Task Description',
+          parent: null,
+        },
+      })
+    ),
+    delete: vi.fn(() => Promise.resolve({})),
   },
 }));
 
-test("renders task list", async () => {
-  render(<App />);
-  expect(screen.getByTestId("tasks-list")).toBeTruthy(); // ✅ Ensures the component renders
-});
-
-test.skip("can add a new task", async () => {
-  render(<TaskManager />);
-  // fireEvent.click(screen.getByTestId("editing-task-btn")[0]);
-
-  expect(screen.getByTestId("input-title")).toBeTruthy();
-  // fireEvent.change(screen.getByTestId("input-title"), {
-  //   target: { value: "New Task" },
-  // });
-  // fireEvent.change(screen.getByTestId("input-description"), {
-  //   target: { value: "Task Description" },
-  // });
-
-  // fireEvent.click(screen.getByTestId("update-task-btn")); // Clicks the first button
-
-  // // ✅ Debugging: Print the updated DOM
-  // await waitFor(() => {
-  //   console.log(screen.debug()); // 🔍 Print the full component tree to see if "New Task" exists
-  // });
-
-  // // ✅ Check if the task list updates
-  // await waitFor(() => {
-  //   const taskList = screen.getByRole("list"); // Get the <ul> element
-  //   expect(taskList.innerHTML).toContain("New Task"); // ✅ Ensures "New Task" appears in the list
-  // });
+test('renders app', async () => {
+  await act(async () => {
+    render(<App />);
+    });
+  expect(await screen.getByTestId('tasks-list')).toBeTruthy(); // TODO
 });

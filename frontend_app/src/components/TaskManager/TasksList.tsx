@@ -9,7 +9,7 @@ const { Text, Title } = Typography;
 type Props = {
   tasks?: CustomTask[];
   onEdit: (taskId: string) => void;
-  onDelete: (task_id: string) => void;
+  onDelete: (taskId: string) => void;
 };
 
 const TasksList = ({
@@ -29,10 +29,10 @@ const TasksList = ({
         return (
           <StyledListItem
             actions={[
-              <Button type="link" onClick={() => onEdit(typedTask.id)}>
+              <Button type="link" data-testid="editTaskBtn" onClick={() => onEdit(typedTask.id)}>
                 Edit
               </Button>,
-              <Button type="link" onClick={() => onDelete(typedTask.id)}>
+              <Button type="link" data-testid="deleteTaskBtn" onClick={() => onDelete(typedTask.id)}>
                 Delete
               </Button>,
             ]}

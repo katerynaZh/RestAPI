@@ -20,14 +20,20 @@ const Dialog = ({
 }: Props) => {
   return (
     <Modal
+      data-testid="dialog"
       title={title}
       open={open}
       onCancel={onCancel}
       footer={[
-        <Button key="cancel" onClick={onCancel}>
+        <Button data-testid="dialog-cancelBtn" key="cancel" onClick={onCancel}>
           Cancel
         </Button>,
-        <Button key="save" type="primary" onClick={onSubmit}>
+        <Button
+          key="save"
+          data-testid="dialog-confirmBtn"
+          type="primary"
+          onClick={onSubmit}
+        >
           {submitLabel}
         </Button>,
       ]}
