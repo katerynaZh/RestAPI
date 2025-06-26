@@ -1,0 +1,60 @@
+name: "[PR] Create Azure PostgreSQL Server Pipeline"
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write     # ОБОВ'ЯЗКОВО для OIDC логіну
+  contents: read
+
+jobs:
+  create_pgdb:
+    name: Creating PostgreSQL Server
+    runs-on: ubuntu-latest
+    environment: dev
+    env:
+      PG_ADMIN_USER: ${{ secrets.PG_ADMIN_USER }}
+      PG_ADMIN_PASSWORD: ${{ secrets.PG_ADMIN_PASSWORD }}
+      RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
+    steps:
+      - name: Log in to Azure with OIDC
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy PG Flexible Server
+        run: |
+          echo "Generate Random PostgreSQL Server Name"
+          PGDB_NAME="pg-rest-api-test-$RANDOM"
+      
+          echo "Get Runner Public IP"
+          IP=$(curl -s https://ifconfig.me)
+
+          echo "Create PostgreSQL Flexible Server"
+          az postgres flexible-server create \
+            --resource-group $RESOURCE_GROUP \
+            --name $PGDB_NAME \
+            --location westeurope \
+            --admin-user $PG_ADMIN_USER \
+            --admin-password $PG_ADMIN_PASSWORD \
+            --tier Burstable \
+            --sku-name Standard_B1ms \
+            --storage-size 32 \
+            --version 16 
+
+          echo "Add Firewall Rule"
+          az postgres flexible-server firewall-rule create \
+            --resource-group $RESOURCE_GROUP \
+            --name $PGDB_NAME \
+            --rule-name github-temp \
+            --start-ip-address $IP \
+            --end-ip-address $IP
+
+          echo "Check PostgreSQL server status"
+          az postgres flexible-server show \
+           --name $PGDB_NAME \
+           --resource-group $RESOURCE_GROUP
