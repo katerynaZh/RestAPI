@@ -44,7 +44,7 @@ jobs:
             --tier Burstable \
             --sku-name Standard_B1ms \
             --storage-size 32 \
-            --version 16
+            --version 16 \
             --public-access 13.82.232.186
 
           echo "Add Firewall Rule"
