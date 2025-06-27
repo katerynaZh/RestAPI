@@ -45,6 +45,7 @@ jobs:
             --sku-name Standard_B1ms \
             --storage-size 32 \
             --version 16 
+            --yes
 
           echo "Add Firewall Rule"
           az postgres flexible-server firewall-rule create \
@@ -54,7 +55,7 @@ jobs:
             --start-ip-address $IP \
             --end-ip-address $IP
             --yes
-            
+
           echo "Check PostgreSQL server status"
           az postgres flexible-server show \
            --name $PGDB_NAME \
