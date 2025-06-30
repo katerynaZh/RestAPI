@@ -45,15 +45,7 @@ jobs:
             --storage-size 32 \
             --version 16 \
             --public-access $IP
-
-          # echo "Add Firewall Rule"
-          # az postgres flexible-server firewall-rule create \
-          #   --resource-group $RESOURCE_GROUP \
-          #   --name $PGDB_NAME \
-          #   --rule-name github-temp \
-          #   --start-ip-address $IP \
-          #   --end-ip-address $IP
-
+            
           echo "Check PostgreSQL server status"
           az postgres flexible-server show \
            --name $PGDB_NAME \
