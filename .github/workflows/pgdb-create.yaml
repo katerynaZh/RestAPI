@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/pipelines
 
 permissions:
   id-token: write     # ОБОВ'ЯЗКОВО для OIDC логіну
