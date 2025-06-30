@@ -3,6 +3,7 @@ name: "Daily Resource Group Cleanup Pipeline"
 on:
   schedule:
       - cron: '0 23 * * *' # Every day at 23:00 UTC
+  workflow_dispatch:
 
 permissions:
   id-token: write     # ОБОВ'ЯЗКОВО для OIDC логіну
