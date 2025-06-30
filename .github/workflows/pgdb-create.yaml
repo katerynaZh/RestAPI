@@ -45,6 +45,7 @@ jobs:
             --sku-name Standard_B1ms \
             --storage-size 32 \
             --version 16
+            --yes
           # --public-access 13.82.232.186
 
           # echo "Add Firewall Rule"
