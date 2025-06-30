@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/pipelines # Додано для запуску з гілки feature/pipelines, видалити у фінальній версії
 
 permissions:
   id-token: write     # ОБОВ'ЯЗКОВО для OIDC логіну
@@ -27,14 +28,12 @@ jobs:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deploy PG Flexible Server
-        run: |
-          echo "Generate Random PostgreSQL Server Name"
-          PGDB_NAME="pg-rest-api-westeurope"
-      
-          #  echo "Get Runner Public IP"
-          # IP=$(curl -s https://ifconfig.me)
-
+        run: |  
+          IP=$(curl -s https://ifconfig.me)
+          echo "Runner Public IP: $IP"
+          
           echo "Create PostgreSQL Flexible Server"
+          PGDB_NAME="pg-rest-api-westeurope"          
           az postgres flexible-server create \
             --resource-group $RESOURCE_GROUP \
             --name $PGDB_NAME \
@@ -44,17 +43,9 @@ jobs:
             --tier Burstable \
             --sku-name Standard_B1ms \
             --storage-size 32 \
-            --version 16
-          # --public-access 13.82.232.186
-
-          # echo "Add Firewall Rule"
-          # az postgres flexible-server firewall-rule create \
-          #   --resource-group $RESOURCE_GROUP \
-          #   --name $PGDB_NAME \
-          #   --rule-name github-temp \
-          #   --start-ip-address $IP \
-          #   --end-ip-address $IP
-
+            --version 16 \
+            --public-access $IP
+            
           echo "Check PostgreSQL server status"
           az postgres flexible-server show \
            --name $PGDB_NAME \
