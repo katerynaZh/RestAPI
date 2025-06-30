@@ -53,8 +53,7 @@ jobs:
             --name $PGDB_NAME \
             --rule-name github-temp \
             --start-ip-address $IP \
-            --end-ip-address $IP \
-            --yes
+            --end-ip-address $IP
 
           echo "Check PostgreSQL server status"
           az postgres flexible-server show \
